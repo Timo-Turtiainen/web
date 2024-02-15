@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
-function Header(props) {
-  return (
-    <h1>
-      {props.course}
-    </h1>
-  )
+function Header({ course }) {
+  return <h1>{course.name}</h1>;
 }
 
-export default Header
+export default Header;
