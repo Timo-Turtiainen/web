@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-function Part(props) {
+function Part({ part, key }) {
   return (
-    <div>
-      <p>{props.parts.name} : {props.parts.exercises}</p>
+    <div key={key}>
+      {part.name} : {part.exercises}
     </div>
-  )
+  );
 }
 
-export default Part
+export default Part;

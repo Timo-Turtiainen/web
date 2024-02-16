@@ -1,6 +1,3 @@
-import Total from "./components/Total";
-import Header from "./components/Header";
-import Content from "./components/Content";
 import Course from "./components/Course";
 
 const App = () => {
@@ -49,23 +46,10 @@ const App = () => {
     },
   ];
 
-  // const initialValue = 0;
-  // const sum = courses.parts.reduce(
-  //   (accumulator, currentValue) => accumulator + currentValue.exercises,
-  //   initialValue
-  // );
-
   return (
     <div>
       <h1>Web development curriculum</h1>
-      <div>
-        {courses.map((value, index) => {
-          <h1 key={index}>{value.name}</h1>;
-        })}
-      </div>
-      {/* <Content parts={courses} />
-      <Total parts={courses} />
-      <h4>total of {sum} exercises</h4> */}
+      <Course courses={courses} />
     </div>
   );
 };
