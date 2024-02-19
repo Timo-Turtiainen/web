@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import FilterPersons from "./components/FilterPersons";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from "axios";
 import phonebookService from "./services/phonebookService";
+import Notification from "./components/Notification ";
+import "./App.css";
 
 const App = () => {
   // powershell -ExecutionPolicy Bypass -Command "json-server --port=3001 --watch db.json"
@@ -27,7 +29,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchText, setSearchText] = useState("");
-
+  const [message, setMessage] = useState(null);
+  const [styleType, setStyleType] = useState(null);
   const onNewName = (e) => {
     setNewName(e.target.value);
   };
@@ -42,15 +45,21 @@ const App = () => {
     const person = persons.find((person) => person.name === newName);
     console.log(person);
     if (person) {
-      alert(`${newName} is already added to phonebook`);
+      setMessage(`${person.name} is already in phonebook`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 1000);
+      // alert(`${newName} is already added to phonebook`);
     } else {
       let newPerson = {
         name: newName,
         number: newNumber,
       };
+
       phonebookService
         .createPerson(newPerson)
         .then(setPersons([...persons, newPerson]))
+
         .catch((error) => {
           console.log("DEBUG: error on create method");
         });
@@ -73,7 +82,7 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <FilterPersons onSearchText={onSearchText} searchText={searchText} />
-      <h2>add a new</h2>
+      <Notification message={message} styleType={styleType} />
       <PersonForm
         handleSubmit={handleSubmit}
         newName={newName}
