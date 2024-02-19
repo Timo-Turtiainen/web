@@ -14,10 +14,15 @@ const App = () => {
     // request.then((response) => {
     //   setPersons(response.data);
     // });
-    phonebookService.getAll().then((response) => {
-      setPersons(response.data);
-    });
-  }, []);
+    phonebookService
+      .getAll()
+      .then((response) => {
+        setPersons(response.data);
+      })
+      .catch((error) => {
+        console.log("DEBUG: error on geAll method");
+      });
+  }, [persons]);
 
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -34,21 +39,34 @@ const App = () => {
   };
 
   const handleAddPerson = () => {
-    persons.map((person) => {
-      if (person.name === newName) {
-        alert(`${newName} is already added to phonebook`);
-      } else {
-        phonebookService
-          .create(person)
-          .then(setPersons([...persons, { name: newName, number: newNumber }]));
-      }
-    });
+    const person = persons.find((person) => person.name === newName);
+    console.log(person);
+    if (person) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      let newPerson = {
+        name: newName,
+        number: newNumber,
+      };
+      phonebookService
+        .createPerson(newPerson)
+        .then(setPersons([...persons, newPerson]))
+        .catch((error) => {
+          console.log("DEBUG: error on create method");
+        });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setNewName("");
     setNewNumber("");
+  };
+
+  const handleDelete = (id) => {
+    // const copyPerson = persons.filter((person) => person.id !== id);
+
+    phonebookService.deletePerson(id);
   };
 
   return (
@@ -65,7 +83,11 @@ const App = () => {
         handleAddPerson={handleAddPerson}
       />
       <h2>Numbers {newName}</h2>
-      <Persons persons={persons} searchText={searchText} />
+      <Persons
+        persons={persons}
+        searchText={searchText}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
