@@ -37,7 +37,6 @@ const App = () => {
     persons.map((person) => {
       if (person.name === newName) {
         alert(`${newName} is already added to phonebook`);
-        setPersons([...persons]);
       } else {
         phonebookService
           .create(person)
