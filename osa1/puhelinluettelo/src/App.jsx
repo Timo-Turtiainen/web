@@ -3,13 +3,18 @@ import FilterPersons from "./components/FilterPersons";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import axios from "axios";
+import phonebookService from "./services/phonebookService";
 
 const App = () => {
   // powershell -ExecutionPolicy Bypass -Command "json-server --port=3001 --watch db.json"
   const [persons, setPersons] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
+    // const request = axios.get("http://localhost:3001/persons");
+    // request.then((response) => {
+    //   setPersons(response.data);
+    // });
+    phonebookService.getAll().then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -34,7 +39,9 @@ const App = () => {
         alert(`${newName} is already added to phonebook`);
         setPersons([...persons]);
       } else {
-        setPersons([...persons, { name: newName, number: newNumber }]);
+        phonebookService
+          .create(person)
+          .then(setPersons([...persons, { name: newName, number: newNumber }]));
       }
     });
   };
