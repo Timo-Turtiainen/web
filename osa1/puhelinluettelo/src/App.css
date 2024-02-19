@@ -2,8 +2,12 @@ h1 {
   color: green;
 }
 
+.rootContainer {
+  background-color: aquamarine;
+}
+
 .error {
-  color: red;
+  color: rgb(167, 0, 153);
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
@@ -21,6 +25,13 @@ h1 {
   margin-bottom: 10px;
 }
 .deletePerson {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 .updatePerson {
 }
