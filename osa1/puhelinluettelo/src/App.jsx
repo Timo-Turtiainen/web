@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import FilterPersons from "./components/FilterPersons";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
@@ -8,6 +7,10 @@ import Notification from "./components/Notification ";
 import "./App.css";
 
 const App = () => {
+  const errorStyle = "error";
+  const addedPersonStyle = "addedPerson";
+  const deletePersonStyle = "deletePerson";
+
   // powershell -ExecutionPolicy Bypass -Command "json-server --port=3001 --watch db.json"
   const [persons, setPersons] = useState([]);
 
@@ -43,19 +46,28 @@ const App = () => {
 
   const handleAddPerson = () => {
     const person = persons.find((person) => person.name === newName);
-    console.log(person);
+
     if (person) {
       setMessage(`${person.name} is already in phonebook`);
+      setStyleType(errorStyle);
       setTimeout(() => {
         setMessage(null);
-      }, 1000);
-      // alert(`${newName} is already added to phonebook`);
+        setStyleType(null);
+      }, 2000);
+
+      // if not in phonebook so added to phonebook
     } else {
       let newPerson = {
         name: newName,
         number: newNumber,
       };
 
+      setMessage(`Added ${newPerson.name} to phone book`);
+      setStyleType(addedPersonStyle);
+      setTimeout(() => {
+        setMessage(null);
+        setStyleType(null);
+      }, 2000);
       phonebookService
         .createPerson(newPerson)
         .then(setPersons([...persons, newPerson]))
@@ -72,10 +84,22 @@ const App = () => {
     setNewNumber("");
   };
 
-  const handleDelete = (id) => {
-    // const copyPerson = persons.filter((person) => person.id !== id);
+  const handleUpdatePerson = (id, updatePerson) => {
+    const person = persons.find((person) => person.id === id);
+    const updatedPerson = { ...persons, name: newName, number: newNumber };
+    phonebookService.updatePerson(id, updatedPerson);
+  };
 
+  const handleDelete = (id) => {
     phonebookService.deletePerson(id);
+    const findPerson = persons.find((person) => person.id === id);
+    console.log(findPerson.name);
+    setMessage(`${findPerson.name} deleted successfully`);
+    setStyleType(deletePersonStyle);
+    setTimeout(() => {
+      setMessage(null);
+      setStyleType(null);
+    }, 2000);
   };
 
   return (
