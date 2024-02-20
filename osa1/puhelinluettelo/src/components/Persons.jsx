@@ -9,9 +9,11 @@ function Persons({ persons, searchText, handleDelete }) {
   return (
     <div>
       {filteredPersons.map((person) => (
-        <p key={person.id}>
+        <p key={person.id} className="personList">
           {person.name} {person.number}
-          <button onClick={() => handleDelete(person.id)}>Delete</button>
+          <button onClick={() => handleDelete(person.id)} className="button">
+            Delete
+          </button>
         </p>
       ))}
     </div>

@@ -10,7 +10,7 @@ function PersonForm({
 }) {
   return (
     <form onSubmit={handleSubmit}>
-      <div>
+      <div className="form">
         name: <input value={newName} onChange={onNewName} />
         number: <input value={newNumber} onChange={onNewNumber} />
       </div>

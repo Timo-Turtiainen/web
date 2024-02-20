@@ -79,24 +79,26 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <FilterPersons onSearchText={onSearchText} searchText={searchText} />
-      <Notification message={message} styleType={styleType} />
-      <PersonForm
-        handleSubmit={handleSubmit}
-        newName={newName}
-        newNumber={newNumber}
-        onNewName={onNewName}
-        onNewNumber={onNewNumber}
-        handleAddPerson={handleAddPerson}
-      />
-      <h2>Numbers {newName}</h2>
-      <Persons
-        persons={persons}
-        searchText={searchText}
-        handleDelete={handleDelete}
-      />
+    <div className="rootContainer">
+      <div className="form">
+        <h1>Phonebook</h1>
+        <FilterPersons onSearchText={onSearchText} searchText={searchText} />
+        <Notification message={message} styleType={styleType} />
+        <PersonForm
+          handleSubmit={handleSubmit}
+          newName={newName}
+          newNumber={newNumber}
+          onNewName={onNewName}
+          onNewNumber={onNewNumber}
+          handleAddPerson={handleAddPerson}
+        />
+        <h2>Numbers {newName}</h2>
+        <Persons
+          persons={persons}
+          searchText={searchText}
+          handleDelete={handleDelete}
+        />
+      </div>
     </div>
   );
 };
