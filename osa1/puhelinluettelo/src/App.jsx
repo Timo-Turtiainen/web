@@ -93,7 +93,6 @@ const App = () => {
   const handleDelete = (id) => {
     phonebookService.deletePerson(id);
     const findPerson = persons.find((person) => person.id === id);
-    console.log(findPerson.name);
     setMessage(`${findPerson.name} deleted successfully`);
     setStyleType(deletePersonStyle);
     setTimeout(() => {
