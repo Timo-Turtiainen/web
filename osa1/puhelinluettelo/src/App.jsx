@@ -34,6 +34,7 @@ const App = () => {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
+
   const onNewName = (e) => {
     setNewName(e.target.value);
   };
@@ -46,16 +47,21 @@ const App = () => {
 
   const handleAddPerson = () => {
     const person = persons.find((person) => person.name === newName);
-
+    console.log(person);
     if (person) {
-      setMessage(`${person.name} is already in phonebook`);
-      setStyleType(errorStyle);
-      setTimeout(() => {
-        setMessage(null);
-        setStyleType(null);
-      }, 2000);
-
-      // if not in phonebook so added to phonebook
+      if (person.name && person.number === newNumber) {
+        console.log(`error section`);
+        setMessage(`${person.name} is already in phonebook`);
+        setStyleType(errorStyle);
+        setTimeout(() => {
+          setMessage(null);
+          setStyleType(null);
+        }, 2000);
+      } else if (person.name && person.number !== newNumber) {
+        console.log(`UPDATE section`);
+        let changedPerson = { ...person, name: newName, number: newNumber };
+        phonebookService.updatePerson(person.id, changedPerson);
+      }
     } else {
       let newPerson = {
         name: newName,
@@ -84,10 +90,9 @@ const App = () => {
     setNewNumber("");
   };
 
-  const handleUpdatePerson = (id, updatePerson) => {
-    const person = persons.find((person) => person.id === id);
-    const updatedPerson = { ...persons, name: newName, number: newNumber };
-    phonebookService.updatePerson(id, updatedPerson);
+  const handleUpdatePerson = (updatePerson) => {
+    setNewName(updatePerson.name);
+    setNewNumber(updatePerson.number);
   };
 
   const handleDelete = (id) => {
@@ -120,6 +125,7 @@ const App = () => {
           persons={persons}
           searchText={searchText}
           handleDelete={handleDelete}
+          handleUpdatePerson={handleUpdatePerson}
         />
       </div>
     </div>
