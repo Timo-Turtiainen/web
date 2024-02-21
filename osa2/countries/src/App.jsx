@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
+import CountryList from "./components/CountryList";
 
 function App() {
   const [input, setInput] = useState("");
-  const [countries, setCountries] = useState([{}]);
+  const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   let baseURL = "https://studies.cs.helsinki.fi/restcountries/api";
 
   useEffect(() => {
-    if (input) {
-      axios
-        .get(`${baseURL}/all`)
-        .then((response) => {
-          setCountries(response.data);
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.log("ERROR");
-        });
-    }
+    // const response = axios.get(`${baseURL}/all`);
+    // response
+    //   .then((response) => setCountries(response.data))
+    //   .catch((error) => {
+    //     console.log("ERROR");
+    //   });
+
+    const fetchData = async () => {
+      try {
+        const { data: response } = await axios.get(`${baseURL}/all`);
+        setCountries(response);
+      } catch (error) {
+        console.log(`Error fetching data`);
+      }
+    };
+    fetchData();
   }, []);
 
   return (
@@ -40,7 +48,7 @@ function App() {
           onChange={(e) => setInput(e.target.value)}
         />
 
-        <h3>{input}</h3>
+        <CountryList countries={countries} input={input} />
       </div>
     </div>
   );
