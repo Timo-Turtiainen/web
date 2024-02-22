@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Country from "./Country";
 
-function CountryList({ countries, input }) {
+function CountryList({ countries, input, handleClick }) {
   let count = 0;
 
   // Filter method checks that input and country name matches
@@ -11,7 +11,7 @@ function CountryList({ countries, input }) {
       return count <= 250;
     } else false;
   });
-  console.log(filteredData.length);
+
   return (
     <>
       {/* Show component if one match */}
@@ -20,7 +20,14 @@ function CountryList({ countries, input }) {
       ) : filteredData.length <= 10 ? (
         <div>
           {filteredData.map((item) => {
-            return <h2 key={item.name.official}>{item.name.common}</h2>;
+            return (
+              <h2 key={item.name.official}>
+                {item.name.common}
+                <button onClick={() => handleClick(item.name.common)}>
+                  show
+                </button>
+              </h2>
+            );
           })}
         </div>
       ) : (

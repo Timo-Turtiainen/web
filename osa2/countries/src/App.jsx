@@ -6,7 +6,6 @@ import CountryList from "./components/CountryList";
 function App() {
   const [input, setInput] = useState("");
   const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   let baseURL = "https://studies.cs.helsinki.fi/restcountries/api";
 
@@ -29,6 +28,10 @@ function App() {
     fetchData();
   }, []);
 
+  const handleClick = (country) => {
+    setInput(country);
+  };
+
   return (
     <div
       style={{
@@ -48,7 +51,11 @@ function App() {
           onChange={(e) => setInput(e.target.value)}
         />
 
-        <CountryList countries={countries} input={input} />
+        <CountryList
+          countries={countries}
+          input={input}
+          handleClick={handleClick}
+        />
       </div>
     </div>
   );
