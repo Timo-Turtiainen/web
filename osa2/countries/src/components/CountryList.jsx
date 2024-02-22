@@ -22,7 +22,6 @@ function CountryList({ countries, input }) {
       ) : (
         <p>Too many matches, specify another filter</p>
       )}
-      {filteredData.length === 1 ? <Country country={filteredData} /> : <p></p>}
     </>
   );
 }
