@@ -15,9 +15,7 @@ app.get("/api/persons", (request, response) => {
 app.get("/info", (request, response) => {
   const dataLength = data.persons.length;
   const dateTime = new Date();
-
   const text = `Phonebook has info for ${dataLength} \npeople ${dateTime}`;
-
   response.send(text);
 });
 
@@ -45,4 +43,34 @@ app.delete("/api/persons/:id", (request, response) => {
   console.log("Dataset:", data);
   response.status(204).end;
 });
+
+/* 3.6: puhelinluettelon backend step6
+Tee uuden numeron lisäykseen virheiden käsittely. Pyyntö ei saa onnistua, jos
+ -nimi tai numero puuttuu
+ - lisättävä nimi on jo luettelossa */
+app.post("/api/persons", (request, response) => {
+  const person = request.body;
+  /* Check if person name is missing */
+  if (!person.name) {
+    return response
+      .status(400)
+      .json({ error: "name is missing, please add person name" });
+  }
+  /* Check if person number is missing */
+  if (!person.number) {
+    return response
+      .status(400)
+      .json({ error: "Number is missing, please add person number" });
+  }
+
+  /* Find if name already exists  */
+  const dublicatePerson = data.persons.find(
+    (item) => item.name === person.name
+  );
+  /* if duplicate person show error message */
+  if (dublicatePerson) {
+    return response.status(400).json({ error: "Name must be unique" });
+  }
+});
+/* Server connection*/
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
