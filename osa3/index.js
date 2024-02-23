@@ -6,12 +6,12 @@ let data = require("./../osa1/puhelinluettelo/db.json");
 
 const PORT = 3001;
 
-// Get all persons
+/* GET all persons */
 app.get("/api/persons", (request, response) => {
   response.json(data);
 });
 
-// 3.2 backend step 2
+/* 3.2 backend step 2 */
 app.get("/info", (request, response) => {
   const dataLength = data.persons.length;
   const dateTime = new Date();
@@ -21,7 +21,7 @@ app.get("/info", (request, response) => {
   response.send(text);
 });
 
-// Get person by id
+/* GET person by id */
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   console.log("Requested id:", id);
@@ -36,4 +36,13 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+/* DELETE person */
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  console.log("id to be deleted:", id);
+  console.log("Dataset:", data); // Log the entire data object to see its structure
+  data = data.persons.filter((person) => Number(person.id) !== id);
+  console.log("Dataset:", data);
+  response.status(204).end;
+});
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
