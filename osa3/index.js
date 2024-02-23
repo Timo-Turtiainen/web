@@ -1,6 +1,14 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
 app.use(express.json());
+app.use(
+  morgan(
+    ":date[iso] :method :url :http-version :user-agent :status (:response-time ms) "
+  )
+); // "combined,common,dev,short,tiny"
+
 // import data from previous assignment
 let data = require("./../osa1/puhelinluettelo/db.json");
 
@@ -70,7 +78,10 @@ app.post("/api/persons", (request, response) => {
   /* if duplicate person show error message */
   if (dublicatePerson) {
     return response.status(400).json({ error: "Name must be unique" });
+  } else {
+    response.json(person);
   }
 });
+
 /* Server connection*/
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
