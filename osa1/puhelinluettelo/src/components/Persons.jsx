@@ -1,12 +1,6 @@
 import React from "react";
 
-function Persons({ persons, searchText, handleDelete, handleUpdatePerson }) {
-  const filteredPersons = persons.filter(
-    (person) =>
-      person.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      person.number.includes(searchText)
-  );
-  // console.log(filteredPersons);
+function Persons({ filteredPersons, handleDelete, handleUpdatePerson }) {
   return (
     <div>
       {filteredPersons.map((person) => (
@@ -16,7 +10,7 @@ function Persons({ persons, searchText, handleDelete, handleUpdatePerson }) {
           onClick={() => handleUpdatePerson(person)}
         >
           {person.name} {person.number}
-          <button onClick={() => handleDelete(person.id)} className="button">
+          <button onClick={() => handleDelete(person)} className="button">
             Delete
           </button>
         </p>

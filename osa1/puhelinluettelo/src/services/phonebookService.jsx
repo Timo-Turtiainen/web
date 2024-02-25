@@ -1,36 +1,28 @@
 import axios from "axios";
-const baseURL = "http://localhost:3001/persons";
+const baseURL = "/api/persons";
 
-// axios get all persons
-const getAll = () => {
+// axios GET all persons
+const getAll = (callback) => {
   const request = axios.get(baseURL);
-  return request.then(baseURL);
+  return request.then((response) => response.data).then(callback);
 };
 
 // Create new Person
-const createPerson = (newPerson) => {
+const createPerson = (newPerson, callback) => {
   const request = axios.post(baseURL, newPerson);
-  return request.then((response) => response.data);
+  return request.then((response) => response.data).then(callback);
 };
 
 // Update person based on id
-const updatePerson = (id, modifyPerson) => {
+const updatePerson = async (id, modifyPerson) => {
   const request = axios.put(`${baseURL}/${id}`, modifyPerson);
-  return request.then((response) => response.data);
+  const response = await request;
+  return response.data;
 };
 
 // Delete person based on id
 const deletePerson = (id) => {
-  const deleteURL = `${baseURL}/${id}`;
-
-  const request = axios.delete(deleteURL);
-  request
-    .then((response) => {
-      console.log(`Deleted id:${id} successfully:, ${response.data}`);
-    })
-    .catch((error) => {
-      console.log("Error deleting resource");
-    });
+  axios.delete(`${baseURL}/${id}`);
 };
 
 export default { getAll, createPerson, deletePerson, updatePerson };

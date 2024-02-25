@@ -19,20 +19,23 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
 
-  const onNewName = (e) => {
-    setNewName(e.target.value);
-  };
-  const onNewNumber = (e) => {
-    setNewNumber(e.target.value);
-  };
-  const onSearchText = (e) => {
-    setSearchText(e.target.value);
-  };
+  useEffect(() => {
+    phonebookService.getAll((data) => setPersons(data.persons));
+    console.log("Inside useEffect() ", persons);
+  }, []);
+
+  const filteredPersons = persons.filter(
+    (person) =>
+      person.name.toLowerCase().includes(searchText) ||
+      person.number.includes(searchText)
+  );
 
   const handleAddPerson = () => {
     const person = persons.find((person) => person.name === newName);
-    console.log(person);
+
+    /* If there is a person */
     if (person) {
+      /* if person is already in phonebook*/
       if (person.name && person.number === newNumber) {
         console.log(`error section`);
         setMessage(`${person.name} is already in phonebook`);
@@ -41,11 +44,12 @@ const App = () => {
           setMessage(null);
           setStyleType(null);
         }, 2000);
+        /* if person is already in phone book and phone number is differend update number */
       } else if (person.name && person.number !== newNumber) {
-        console.log(`UPDATE section`);
         let changedPerson = { ...person, name: newName, number: newNumber };
         phonebookService.updatePerson(person.id, changedPerson);
       }
+      /* else person not exist so create person  */
     } else {
       let newPerson = {
         name: newName,
@@ -58,12 +62,13 @@ const App = () => {
         setMessage(null);
         setStyleType(null);
       }, 2000);
+
+      console.log("newPerson before createPerson:", newPerson);
       phonebookService
-        .createPerson(newPerson)
-        .then(setPersons([...persons, newPerson]))
+        .createPerson(newPerson, (person) => setPersons([...persons, person]))
 
         .catch((error) => {
-          console.log("DEBUG: error on create method");
+          console.log("DEBUG: error on createPerson method", error);
         });
     }
   };
@@ -79,35 +84,49 @@ const App = () => {
     setNewNumber(updatePerson.number);
   };
 
-  const handleDelete = (id) => {
-    phonebookService.deletePerson(id);
-    const findPerson = persons.find((person) => person.id === id);
-    setMessage(`${findPerson.name} deleted successfully`);
-    setStyleType(deletePersonStyle);
-    setTimeout(() => {
-      setMessage(null);
-      setStyleType(null);
-    }, 2000);
+  const handleDelete = async (person) => {
+    try {
+      const personList = persons.filter(
+        (character) => character.id !== person.id
+      );
+      setPersons(personList);
+      await phonebookService.deletePerson(person.id);
+
+      setMessage(`${person.name} deleted successfully`);
+      setStyleType(deletePersonStyle);
+      setTimeout(() => {
+        setMessage(null);
+        setStyleType(null);
+        setNewName("");
+        setNewNumber("");
+      }, 2000);
+    } catch (error) {
+      console.log("Error on deleting person", error);
+    }
   };
 
   return (
     <div className="rootContainer">
       <div className="form">
         <h1>Phonebook</h1>
-        <FilterPersons onSearchText={onSearchText} searchText={searchText} />
+        <FilterPersons
+          onSearchText={(e) => setSearchText(e.target.value)}
+          searchText={searchText}
+        />
         <Notification message={message} styleType={styleType} />
         <PersonForm
           handleSubmit={handleSubmit}
           newName={newName}
           newNumber={newNumber}
-          onNewName={onNewName}
-          onNewNumber={onNewNumber}
+          onNewName={(e) => setNewName(e.target.value)}
+          onNewNumber={(e) => setNewNumber(e.target.value)}
           handleAddPerson={handleAddPerson}
         />
-        <h2>Numbers {newName}</h2>
+        <h2>
+          Number {newName} {newNumber}
+        </h2>
         <Persons
-          persons={persons}
-          searchText={searchText}
+          filteredPersons={filteredPersons}
           handleDelete={handleDelete}
           handleUpdatePerson={handleUpdatePerson}
         />

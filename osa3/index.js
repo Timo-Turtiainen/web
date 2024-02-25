@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
@@ -8,14 +9,22 @@ app.use(
     ":date[iso] :method :url :http-version :user-agent :status (:response-time ms) "
   )
 ); // "combined,common,dev,short,tiny"
+app.use(cors());
 
 // import data from previous assignment
 let data = require("./../osa1/puhelinluettelo/db.json");
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+
+const generateId = () => {
+  const maxId =
+    data.persons.length > 0 ? Math.max(...data.persons.map((n) => n.id)) : 0;
+  return maxId + 1;
+};
 
 /* GET all persons */
 app.get("/api/persons", (request, response) => {
+  // console.log("Server GET All", data);
   response.json(data);
 });
 
@@ -30,10 +39,10 @@ app.get("/info", (request, response) => {
 /* GET person by id */
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
-  console.log("Requested id:", id);
-  console.log("Dataset:", data); // Log the entire data object to see its structure
+  // console.log("Requested id:", id);
+  // console.log("Dataset:", data); // Log the entire data object to see its structure
   let person = data.persons.find((person) => Number(person.id) === id);
-  console.log("Found person:", person); // Log the person found by the id
+  // console.log("Found person:", person); // Log the person found by the id
   if (person) {
     response.json(person);
   } else {
@@ -45,10 +54,10 @@ app.get("/api/persons/:id", (request, response) => {
 /* DELETE person */
 app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
-  console.log("id to be deleted:", id);
-  console.log("Dataset:", data); // Log the entire data object to see its structure
-  data = data.persons.filter((person) => Number(person.id) !== id);
-  console.log("Dataset:", data);
+  // console.log("id to be deleted:", id);
+  // console.log("Dataset:", data); // Log the entire data object to see its structure
+  data.persons = data.persons.filter((person) => Number(person.id) !== id);
+  // console.log("server delete Dataset:", data); // After delete
   response.status(204).end;
 });
 
@@ -58,6 +67,7 @@ Tee uuden numeron lisäykseen virheiden käsittely. Pyyntö ei saa onnistua, jos
  - lisättävä nimi on jo luettelossa */
 app.post("/api/persons", (request, response) => {
   const person = request.body;
+
   /* Check if person name is missing */
   if (!person.name) {
     return response
@@ -78,9 +88,17 @@ app.post("/api/persons", (request, response) => {
   /* if duplicate person show error message */
   if (dublicatePerson) {
     return response.status(400).json({ error: "Name must be unique" });
-  } else {
-    response.json(person);
   }
+
+  const newPerson = {
+    id: generateId(),
+    name: person.name,
+    number: person.number,
+  };
+
+  data.persons.push(newPerson);
+
+  response.json(newPerson);
 });
 
 /* Server connection*/

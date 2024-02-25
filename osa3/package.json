@@ -1,12 +1,16 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "nodemon": "^3.1.0"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "client": "cd ../osa1/puhelinluettelo && npm run dev" 
   }
 }
