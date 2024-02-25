@@ -13,22 +13,6 @@ const App = () => {
 
   // powershell -ExecutionPolicy Bypass -Command "json-server --port=3001 --watch db.json"
   const [persons, setPersons] = useState([]);
-
-  useEffect(() => {
-    // const request = axios.get("http://localhost:3001/persons");
-    // request.then((response) => {
-    //   setPersons(response.data);
-    // });
-    phonebookService
-      .getAll()
-      .then((response) => {
-        setPersons(response.data);
-      })
-      .catch((error) => {
-        console.log("DEBUG: error on geAll method");
-      });
-  }, [persons]);
-
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchText, setSearchText] = useState("");
