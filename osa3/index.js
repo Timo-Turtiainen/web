@@ -24,7 +24,7 @@ app.use(express.static("dist"));
 // import data from previous assignment
 let data = require("./../osa1/puhelinluettelo/db.json");
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000;
 
 const generateId = () => {
   const maxId =
