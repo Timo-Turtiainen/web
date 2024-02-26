@@ -1,3 +1,11 @@
+/* Save package.json scripts
+  // "scripts": {
+  //   "start": "concurrently \"npm run server\" \"npm run client\"",
+  //   "server": "nodemon server.js",
+  //   "client": "cd ../osa1/puhelinluettelo && npm run dev" 
+  // }
+*/
+
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
