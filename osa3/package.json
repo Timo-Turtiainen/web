@@ -9,6 +9,9 @@
     "nodemon": "^3.1.0"
   },
   "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "client": "cd ../osa1/puhelinluettelo && npm run dev",
     "build:ui": "rm -rf dist && cd ../puhelinluettelo && npm run build && cp -r dist ../osa3",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   }
