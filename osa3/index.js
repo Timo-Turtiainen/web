@@ -11,6 +11,8 @@ app.use(
 ); // "combined,common,dev,short,tiny"
 app.use(cors());
 
+app.use(express.static("dist"));
+
 // import data from previous assignment
 let data = require("./../osa1/puhelinluettelo/db.json");
 
