@@ -20,7 +20,7 @@ const App = () => {
   const [styleType, setStyleType] = useState(null);
 
   useEffect(() => {
-    phonebookService.getAll((data) => setPersons(data.persons));
+    phonebookService.getAll((data) => setPersons(data));
     console.log("Inside useEffect() ", persons);
   }, []);
 
