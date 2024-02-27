@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 mongoose.set("strictQuery", false);
-
+console.log("before url");
 const url = process.env.MONGODB_URI;
 console.log("Connnecting to ", url);
 
@@ -13,7 +13,7 @@ mongoose
     console.log("Connected to MongoDB");
   })
   .catch((error) => {
-    console.log("Error connecting to MongoDB");
+    console.log("Error connecting to MongoDB", error);
   });
 
 const personSchema = mongoose.Schema({
