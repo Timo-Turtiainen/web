@@ -103,8 +103,8 @@ app.post("/api/persons", (request, response) => {
   console.log("Server POST method", person);
   person.save().then((savedPerson) => {
     response.json(savedPerson);
+    mongoose.connection.close();
   });
-  mongoose.connection.close();
   // /* Check if person name is missing */
   // if (!person.name) {
   //   return response
