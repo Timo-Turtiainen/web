@@ -8,7 +8,9 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 const app = express();
+
 app.use(express.json());
 app.use(
   morgan(
@@ -90,7 +92,7 @@ app.post("/api/persons", (request, response) => {
   console.log("body content", body.content);
 
   /* There is no content */
-  if (body.content === undefined) {
+  if (body.name === undefined || body.number === undefined) {
     return response.status(400).json({ error: "content missing" });
   }
 
