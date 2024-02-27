@@ -7,7 +7,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-
+const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 app.use(
@@ -39,6 +39,7 @@ app.get("/api/persons", (request, response) => {
   });
 
   response.json(data);
+  mongoose.connection.close();
 });
 
 /* 3.2 backend step 2 */
@@ -54,6 +55,7 @@ app.get("/api/persons/:id", (request, response) => {
   Person.findById(request.params.id).then((person) => {
     response.json(person);
   });
+
   // const id = Number(request.params.id);
   // // console.log("Requested id:", id);
   // // console.log("Dataset:", data); // Log the entire data object to see its structure
@@ -97,7 +99,7 @@ app.post("/api/persons", (request, response) => {
   person.save().then((savedPerson) => {
     response.json(savedPerson);
   });
-
+  mongoose.connection.close();
   // /* Check if person name is missing */
   // if (!person.name) {
   //   return response
