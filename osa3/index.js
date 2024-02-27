@@ -36,6 +36,7 @@ app.get("/api/persons", (request, response) => {
   // console.log("Server GET All", data);
   Person.find({}).then((persons) => {
     response.json(persons);
+    console.log("backend get all method ", persons);
   });
 
   response.json(data);
@@ -67,6 +68,7 @@ app.get("/api/persons/:id", (request, response) => {
   //   console.log("Person not found");
   //   response.status(404).end();
   // }
+  mongoose.connection.close();
 });
 
 /* DELETE person */
