@@ -7,7 +7,7 @@ require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const mongoose = require("mongoose");
+
 const app = express();
 app.use(express.json());
 app.use(
@@ -23,7 +23,7 @@ const Person = require("./models/person");
 // import data from previous assignment
 // let data = require("./../osa1/puhelinluettelo/db.json");
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 // const generateId = () => {
 //   const maxId =
