@@ -3,10 +3,11 @@
 "server": "nodemon server.js",
 "client": "cd ../osa1/puhelinluettelo && npm run dev", */
 
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-
+const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 app.use(
@@ -18,20 +19,25 @@ app.use(cors());
 
 app.use(express.static("dist"));
 
+const Person = require("./models/person");
 // import data from previous assignment
-let data = require("./../osa1/puhelinluettelo/db.json");
+// let data = require("./../osa1/puhelinluettelo/db.json");
 
 const PORT = process.env.PORT || 3001;
 
-const generateId = () => {
-  const maxId =
-    data.persons.length > 0 ? Math.max(...data.persons.map((n) => n.id)) : 0;
-  return maxId + 1;
-};
+// const generateId = () => {
+//   const maxId =
+//     data.persons.length > 0 ? Math.max(...data.persons.map((n) => n.id)) : 0;
+//   return maxId + 1;
+// };
 
 /* GET all persons */
 app.get("/api/persons", (request, response) => {
   // console.log("Server GET All", data);
+  Person.find({}).then((persons) => {
+    response.json(persons);
+  });
+
   response.json(data);
 });
 
@@ -45,17 +51,20 @@ app.get("/info", (request, response) => {
 
 /* GET person by id */
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  // console.log("Requested id:", id);
-  // console.log("Dataset:", data); // Log the entire data object to see its structure
-  let person = data.persons.find((person) => Number(person.id) === id);
-  // console.log("Found person:", person); // Log the person found by the id
-  if (person) {
+  Person.findById(request.params.id).then((person) => {
     response.json(person);
-  } else {
-    console.log("Person not found");
-    response.status(404).end();
-  }
+  });
+  // const id = Number(request.params.id);
+  // // console.log("Requested id:", id);
+  // // console.log("Dataset:", data); // Log the entire data object to see its structure
+  // let person = data.persons.find((person) => Number(person.id) === id);
+  // // console.log("Found person:", person); // Log the person found by the id
+  // if (person) {
+  //   response.json(person);
+  // } else {
+  //   console.log("Person not found");
+  //   response.status(404).end();
+  // }
 });
 
 /* DELETE person */
@@ -73,39 +82,53 @@ Tee uuden numeron lisäykseen virheiden käsittely. Pyyntö ei saa onnistua, jos
  -nimi tai numero puuttuu
  - lisättävä nimi on jo luettelossa */
 app.post("/api/persons", (request, response) => {
-  const person = request.body;
+  const body = request.body;
 
-  /* Check if person name is missing */
-  if (!person.name) {
-    return response
-      .status(400)
-      .json({ error: "name is missing, please add person name" });
+  /* There is no content */
+  if (body.content === undefined) {
+    return response.status(400).json({ error: "content missing" });
   }
-  /* Check if person number is missing */
-  if (!person.number) {
-    return response
-      .status(400)
-      .json({ error: "Number is missing, please add person number" });
-  }
+  /*  */
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  });
 
-  /* Find if name already exists  */
-  const dublicatePerson = data.persons.find(
-    (item) => item.name === person.name
-  );
-  /* if duplicate person show error message */
-  if (dublicatePerson) {
-    return response.status(400).json({ error: "Name must be unique" });
-  }
+  person.save().then((savedPerson) => {
+    response.json(savedPerson);
+  });
 
-  const newPerson = {
-    id: generateId(),
-    name: person.name,
-    number: person.number,
-  };
+  // /* Check if person name is missing */
+  // if (!person.name) {
+  //   return response
+  //     .status(400)
+  //     .json({ error: "name is missing, please add person name" });
+  // }
+  // /* Check if person number is missing */
+  // if (!person.number) {
+  //   return response
+  //     .status(400)
+  //     .json({ error: "Number is missing, please add person number" });
+  // }
 
-  data.persons.push(newPerson);
+  // /* Find if name already exists  */
+  // const dublicatePerson = data.persons.find(
+  //   (item) => item.name === person.name
+  // );
+  // /* if duplicate person show error message */
+  // if (dublicatePerson) {
+  //   return response.status(400).json({ error: "Name must be unique" });
+  // }
 
-  response.json(newPerson);
+  // const newPerson = {
+  //   id: generateId(),
+  //   name: person.name,
+  //   number: person.number,
+  // };
+
+  // data.persons.push(newPerson);
+
+  // response.json(newPerson);
 });
 
 /* Server connection*/
