@@ -19,11 +19,11 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
 
-  useEffect(() => {
-    console.log("Before phoneBookService inside useEffect() ");
-    phonebookService.getAll((data) => setPersons(data));
-    console.log("Inside useEffect() ", persons);
-  }, []);
+  // useEffect(() => {
+  //   console.log("Before phoneBookService inside useEffect() ");
+  //   phonebookService.getAll((data) => setPersons(data));
+  //   console.log("Inside useEffect() ", persons);
+  // }, []);
 
   const filteredPersons = persons.filter(
     (person) =>

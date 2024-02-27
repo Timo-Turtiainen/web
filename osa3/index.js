@@ -88,15 +88,18 @@ Tee uuden numeron lisäykseen virheiden käsittely. Pyyntö ei saa onnistua, jos
 app.post("/api/persons", (request, response) => {
   const body = request.body;
   console.log("body content", body.content);
+
   /* There is no content */
   if (body.content === undefined) {
     return response.status(400).json({ error: "content missing" });
   }
+
   /*  */
   const person = new Person({
     name: body.name,
     number: body.number,
   });
+
   console.log("Server POST method", person);
   person.save().then((savedPerson) => {
     response.json(savedPerson);
