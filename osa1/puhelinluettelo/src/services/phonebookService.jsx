@@ -4,7 +4,14 @@ const baseURL = "/api/persons";
 // axios GET all persons
 const getAll = (callback) => {
   const request = axios.get(baseURL);
-  return request.then((response) => response.data).then(callback);
+  console.log(baseURL);
+  return request
+    .then((response) => {
+      console.log(response);
+      console.log(callback);
+      callback(response.data);
+    })
+    .catch((error) => console.log("Error getAll()", error));
 };
 
 // Create new Person

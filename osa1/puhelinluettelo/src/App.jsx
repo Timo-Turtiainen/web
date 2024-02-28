@@ -11,7 +11,6 @@ const App = () => {
   const addedPersonStyle = "addedPerson";
   const deletePersonStyle = "deletePerson";
 
-  // powershell -ExecutionPolicy Bypass -Command "json-server --port=3001 --watch db.json"
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
@@ -20,9 +19,7 @@ const App = () => {
   const [styleType, setStyleType] = useState(null);
 
   useEffect(() => {
-    console.log("Before phoneBookService inside useEffect() ");
     phonebookService.getAll((data) => setPersons(data));
-    console.log("Inside useEffect() ", persons);
   }, []);
 
   const filteredPersons = persons.filter(

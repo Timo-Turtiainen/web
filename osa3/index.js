@@ -22,6 +22,7 @@ app.use(cors());
 app.use(express.static("dist"));
 
 const Person = require("./models/person");
+
 // import data from previous assignment
 // let data = require("./../osa1/puhelinluettelo/db.json");
 
@@ -37,9 +38,9 @@ const PORT = process.env.PORT;
 app.get("/api/persons", (request, response) => {
   // console.log("Server GET All", data);
   Person.find({}).then((persons) => {
+    console.log(persons);
     response.json(persons);
   });
-  mongoose.connection.close();
 });
 
 // /* 3.2 backend step 2 */
