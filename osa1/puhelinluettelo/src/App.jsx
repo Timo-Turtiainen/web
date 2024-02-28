@@ -22,8 +22,8 @@ const App = () => {
     phonebookService.getAll((data) => setPersons(data));
   }, []);
 
+  /* Filter array of persons based on input field */
   const filteredPersons = persons.filter((person) => {
-    // console.log("FILTER: ", person);
     return (
       person.name.toLowerCase().includes(searchText) ||
       person.number.includes(searchText)
@@ -31,6 +31,7 @@ const App = () => {
   });
 
   const handleAddPerson = async () => {
+    /* Check if person is on array of persons*/
     const person = persons.find((person) => person.name === newName);
 
     /* If there is a person */
@@ -44,7 +45,7 @@ const App = () => {
           setMessage(null);
           setStyleType(null);
         }, 2000);
-        /* if person is already in phone book and phone number is differend update number */
+        /* if person is already in phone book and phone number is differend => update number */
       } else {
         let changedPerson = { ...person, number: newNumber };
         let updatedPerson = await phonebookService.updatePerson(
@@ -52,16 +53,12 @@ const App = () => {
           changedPerson
         );
         setPersons(
-          persons.map((person) => {
-            if (person.id === updatedPerson.id) {
-              return updatedPerson;
-            } else {
-              return person;
-            }
-          })
+          persons.map((person) =>
+            person.id === updatedPerson.id ? updatedPerson : person
+          )
         );
       }
-      /* else person not exist so create person  */
+      /* else person is not in array of persons  */
     } else {
       let newPerson = {
         name: newName,

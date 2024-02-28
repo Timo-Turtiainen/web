@@ -8,7 +8,7 @@ const getAll = (callback) => {
     .then((response) => {
       callback(response.data);
     })
-    .catch((error) => console.log("Error getAll()", error));
+    .catch((error) => console.log("Error on getAll()", error));
 };
 
 // Create new Person
