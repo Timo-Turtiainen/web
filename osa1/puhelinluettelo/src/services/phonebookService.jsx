@@ -19,10 +19,11 @@ const createPerson = (newPerson, callback) => {
 };
 
 // Update person based on id
-const updatePerson = async (id, modifyPerson) => {
+const updatePerson = (id, modifyPerson) => {
   const request = axios.put(`${baseURL}/${id}`, modifyPerson);
-  const response = await request;
-  return response.data;
+  return request((response) => {
+    response.data;
+  });
 };
 
 // Delete person based on id
