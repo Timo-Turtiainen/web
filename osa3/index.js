@@ -42,7 +42,7 @@ app.get("/api/persons", (request, response) => {
     console.log("backend get all method ", persons);
   });
 
-  mongoose.connection.close();
+  // mongoose.connection.close();
 });
 
 // /* 3.2 backend step 2 */

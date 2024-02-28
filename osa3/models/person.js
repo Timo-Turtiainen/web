@@ -17,6 +17,7 @@ mongoose
   });
 
 const personSchema = mongoose.Schema({
+  id: Number,
   name: String,
   number: String,
 });
