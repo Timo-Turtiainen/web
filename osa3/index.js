@@ -27,11 +27,11 @@ const Person = require("./models/person");
 
 const PORT = process.env.PORT;
 
-// const generateId = () => {
-//   const maxId =
-//     data.persons.length > 0 ? Math.max(...data.persons.map((n) => n.id)) : 0;
-//   return maxId + 1;
-// };
+const generateId = () => {
+  const maxId =
+    data.persons.length > 0 ? Math.max(...data.persons.map((n) => n.id)) : 0;
+  return maxId + 1;
+};
 
 /* GET all persons */
 app.get("/api/persons", (request, response) => {
@@ -102,6 +102,7 @@ app.post("/api/persons", (request, response) => {
 
   /*  */
   const person = new Person({
+    id: generateId(),
     name: body.name,
     number: body.number,
   });
