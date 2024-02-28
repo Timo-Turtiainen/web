@@ -41,6 +41,7 @@ app.get("/api/persons", (request, response) => {
     console.log(persons);
     response.json(persons);
   });
+  mongoose.connection.close();
 });
 
 // /* 3.2 backend step 2 */
@@ -105,8 +106,8 @@ app.post("/api/persons", (request, response) => {
   console.log("Server POST method", person);
   person.save().then((savedPerson) => {
     response.json(savedPerson);
-    mongoose.connection.close();
   });
+  mongoose.connection.close();
   // /* Check if person name is missing */
   // if (!person.name) {
   //   return response
