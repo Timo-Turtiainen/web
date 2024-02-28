@@ -29,7 +29,6 @@ const errorHandler = (error, request, response, next) => {
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
-app.use(errorHandler);
 app.use(unknownEndpoint);
 
 /* GET all persons */
@@ -92,6 +91,7 @@ app.post("/api/persons", (request, response) => {
     mongoose.connection.close();
   });
 });
+app.use(errorHandler);
 
 /* Server connection*/
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
