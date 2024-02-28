@@ -43,8 +43,8 @@ const App = () => {
           setStyleType(null);
         }, 2000);
         /* if person is already in phone book and phone number is differend update number */
-      } else if (person.name && person.number !== newNumber) {
-        let changedPerson = { ...person, name: newName, number: newNumber };
+      } else {
+        let changedPerson = { ...person, number: newNumber };
         phonebookService.updatePerson(person.id, changedPerson);
       }
       /* else person not exist so create person  */
