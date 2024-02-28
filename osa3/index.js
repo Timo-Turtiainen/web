@@ -37,9 +37,11 @@ const PORT = process.env.PORT;
 app.get("/api/persons", (request, response) => {
   // console.log("Server GET All", data);
 
-  Person.find({}).then((persons) => {
-    response.json(persons);
-    console.log("backend get all method ", persons);
+  Person.find({}).then((result) => {
+    result.forEach((person) => {
+      response.json(person);
+    });
+    mongoose.connection.close();
   });
 
   // mongoose.connection.close();
