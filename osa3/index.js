@@ -30,10 +30,6 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-app.use(unknownEndpoint);
-
-app.use(errorHandler);
-
 /* GET all persons */
 app.get("/api/persons", (request, response) => {
   // console.log("Server GET All", data);
@@ -94,6 +90,10 @@ app.post("/api/persons", (request, response) => {
     mongoose.connection.close();
   });
 });
+
+app.use(unknownEndpoint);
+
+app.use(errorHandler);
 
 /* Server connection*/
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
