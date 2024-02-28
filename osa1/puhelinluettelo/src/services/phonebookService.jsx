@@ -20,7 +20,6 @@ const createPerson = (newPerson, callback) => {
 // Update person based on id
 const updatePerson = async (id, modifyPerson) => {
   const request = await axios.put(`${baseURL}/${id}`, modifyPerson);
-
   return request.data;
 };
 

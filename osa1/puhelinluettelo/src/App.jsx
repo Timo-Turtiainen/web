@@ -38,7 +38,6 @@ const App = () => {
     if (person) {
       /* if person is already in phonebook*/
       if (person.name && person.number === newNumber) {
-        console.log(`error section`);
         setMessage(`${person.name} is already in phonebook`);
         setStyleType(errorStyle);
         setTimeout(() => {
@@ -72,10 +71,8 @@ const App = () => {
         setStyleType(null);
       }, 2000);
 
-      console.log("newPerson before createPerson:", newPerson);
       phonebookService
         .createPerson(newPerson, (person) => setPersons([...persons, person]))
-
         .catch((error) => {
           console.log("DEBUG: error on createPerson method", error);
         });
