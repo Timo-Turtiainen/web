@@ -17,6 +17,7 @@ const Person = require("./models/person");
 
 const PORT = process.env.PORT;
 
+/* Error Handlers */
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
@@ -89,6 +90,20 @@ app.post("/api/persons", (request, response) => {
     response.json(savedPerson);
     mongoose.connection.close();
   });
+});
+
+app.put("/api/persons", (request, response) => {
+  const body = request.body;
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  };
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then((updatedPerson) => {
+      response.json(updatedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 app.use(unknownEndpoint);
