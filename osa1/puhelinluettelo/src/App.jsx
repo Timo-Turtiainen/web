@@ -17,18 +17,21 @@ const App = () => {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
+  console.log(persons);
 
   useEffect(() => {
     phonebookService.getAll((data) => setPersons(data));
   }, []);
 
-  const filteredPersons = persons.filter(
-    (person) =>
+  const filteredPersons = persons.filter((person) => {
+    // console.log("FILTER: ", person);
+    return (
       person.name.toLowerCase().includes(searchText) ||
       person.number.includes(searchText)
-  );
+    );
+  });
 
-  const handleAddPerson = () => {
+  const handleAddPerson = async () => {
     const person = persons.find((person) => person.name === newName);
 
     /* If there is a person */
@@ -45,14 +48,22 @@ const App = () => {
         /* if person is already in phone book and phone number is differend update number */
       } else {
         let changedPerson = { ...person, number: newNumber };
-        let updatedPerson = phonebookService.updatePerson(
+        let updatedPerson = await phonebookService.updatePerson(
           person.id,
           changedPerson
         );
         setPersons(
-          persons.map((person) =>
-            person.id === updatedPerson.id ? updatedPerson : person
-          )
+          persons.map((person) => {
+            console.log(person);
+            console.log(updatedPerson);
+            if (person.id === updatedPerson.id) {
+              console.log("Updated Person", updatedPerson);
+              return updatedPerson;
+            } else {
+              console.log("Person", person);
+              return person;
+            }
+          })
         );
       }
       /* else person not exist so create person  */

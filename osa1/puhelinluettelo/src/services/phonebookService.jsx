@@ -4,7 +4,6 @@ const baseURL = "/api/persons";
 // axios GET all persons
 const getAll = (callback) => {
   const request = axios.get(baseURL);
-  console.log(baseURL);
   return request
     .then((response) => {
       callback(response.data);
@@ -19,11 +18,9 @@ const createPerson = (newPerson, callback) => {
 };
 
 // Update person based on id
-const updatePerson = (id, modifyPerson) => {
-  const request = axios.put(`${baseURL}/${id}`, modifyPerson);
-  return request.then((response) => {
-    response.data;
-  });
+const updatePerson = async (id, modifyPerson) => {
+  const request = await axios.put(`${baseURL}/${id}`, modifyPerson);
+  return request.data;
 };
 
 // Delete person based on id
