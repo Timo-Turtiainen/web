@@ -36,7 +36,6 @@ const PORT = process.env.PORT;
 /* GET all persons */
 app.get("/api/persons", (request, response) => {
   // console.log("Server GET All", data);
-
   Person.find({}).then((persons) => {
     response.json(persons);
     mongoose.connection.close();
