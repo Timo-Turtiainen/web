@@ -7,8 +7,6 @@ const getAll = (callback) => {
   console.log(baseURL);
   return request
     .then((response) => {
-      console.log(response);
-      console.log(callback);
       callback(response.data);
     })
     .catch((error) => console.log("Error getAll()", error));
