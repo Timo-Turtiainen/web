@@ -104,6 +104,7 @@ app.put("/api/persons/:id", (request, response) => {
       response.json(updatedPerson);
     })
     .catch((error) => next(error));
+  mongoose.connection.close();
 });
 
 app.use(unknownEndpoint);

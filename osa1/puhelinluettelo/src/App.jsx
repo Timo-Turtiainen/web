@@ -54,13 +54,9 @@ const App = () => {
         );
         setPersons(
           persons.map((person) => {
-            console.log(person);
-            console.log(updatedPerson);
             if (person.id === updatedPerson.id) {
-              console.log("Updated Person", updatedPerson);
               return updatedPerson;
             } else {
-              console.log("Person", person);
               return person;
             }
           })
