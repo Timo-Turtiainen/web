@@ -17,6 +17,18 @@ const Person = require("./models/person");
 
 const PORT = process.env.PORT;
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
 app.use(errorHandler);
 app.use(unknownEndpoint);
 
@@ -80,19 +92,6 @@ app.post("/api/persons", (request, response) => {
     mongoose.connection.close();
   });
 });
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
-
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" });
-  }
-
-  next(error);
-};
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" });
-};
 
 /* Server connection*/
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
