@@ -10,7 +10,7 @@ function FilterPersons({ onSearchText, searchText }) {
         alignItems: "baseline",
       }}
     >
-      <p style={{ margin: "5px" }}>filter shown with</p>
+      <p>filter shown with</p>
       <input value={searchText} onChange={onSearchText} />
     </div>
   );

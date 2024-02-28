@@ -51,6 +51,7 @@ const App = () => {
           person.id,
           changedPerson
         );
+        /* setPersons after updating  */
         setPersons(
           persons.map((person) =>
             person.id === updatedPerson.id ? updatedPerson : person
@@ -90,13 +91,13 @@ const App = () => {
     setNewNumber(updatePerson.number);
   };
 
-  const handleDelete = async (person) => {
+  const handleDelete = (person) => {
     try {
       const personList = persons.filter(
         (character) => character.id !== person.id
       );
       setPersons(personList);
-      await phonebookService.deletePerson(person.id);
+      phonebookService.deletePerson(person.id);
 
       setMessage(`${person.name} deleted successfully`);
       setStyleType(deletePersonStyle);
