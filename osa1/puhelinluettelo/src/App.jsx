@@ -17,7 +17,6 @@ const App = () => {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
-  console.log(persons);
 
   useEffect(() => {
     phonebookService.getAll((data) => setPersons(data));
