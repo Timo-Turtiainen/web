@@ -21,7 +21,7 @@ const createPerson = (newPerson, callback) => {
 // Update person based on id
 const updatePerson = (id, modifyPerson) => {
   const request = axios.put(`${baseURL}/${id}`, modifyPerson);
-  return request((response) => {
+  return request.then((response) => {
     response.data;
   });
 };
