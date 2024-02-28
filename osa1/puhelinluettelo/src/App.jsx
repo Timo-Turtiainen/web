@@ -45,7 +45,15 @@ const App = () => {
         /* if person is already in phone book and phone number is differend update number */
       } else {
         let changedPerson = { ...person, number: newNumber };
-        phonebookService.updatePerson(person.id, changedPerson);
+        let updatedPerson = phonebookService.updatePerson(
+          person.id,
+          changedPerson
+        );
+        setPersons(
+          persons.map((person) =>
+            person.id === updatedPerson.id ? updatedPerson : person
+          )
+        );
       }
       /* else person not exist so create person  */
     } else {
