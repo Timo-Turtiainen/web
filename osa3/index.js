@@ -41,7 +41,6 @@ app.get("/api/persons", (request, response) => {
     console.log(persons);
     response.json(persons);
   });
-  mongoose.connection.close();
 });
 
 // /* 3.2 backend step 2 */
@@ -90,7 +89,7 @@ Tee uuden numeron lisäykseen virheiden käsittely. Pyyntö ei saa onnistua, jos
  - lisättävä nimi on jo luettelossa */
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-  console.log("body content", body.content);
+  console.log("body content", body.name + " " + body.number);
 
   /* There is no content */
   if (body.name === undefined || body.number === undefined) {
@@ -106,39 +105,8 @@ app.post("/api/persons", (request, response) => {
   console.log("Server POST method", person);
   person.save().then((savedPerson) => {
     response.json(savedPerson);
+    mongoose.connection.close();
   });
-  mongoose.connection.close();
-  // /* Check if person name is missing */
-  // if (!person.name) {
-  //   return response
-  //     .status(400)
-  //     .json({ error: "name is missing, please add person name" });
-  // }
-  // /* Check if person number is missing */
-  // if (!person.number) {
-  //   return response
-  //     .status(400)
-  //     .json({ error: "Number is missing, please add person number" });
-  // }
-
-  // /* Find if name already exists  */
-  // const dublicatePerson = data.persons.find(
-  //   (item) => item.name === person.name
-  // );
-  // /* if duplicate person show error message */
-  // if (dublicatePerson) {
-  //   return response.status(400).json({ error: "Name must be unique" });
-  // }
-
-  // const newPerson = {
-  //   id: generateId(),
-  //   name: person.name,
-  //   number: person.number,
-  // };
-
-  // data.persons.push(newPerson);
-
-  // response.json(newPerson);
 });
 
 /* Server connection*/
