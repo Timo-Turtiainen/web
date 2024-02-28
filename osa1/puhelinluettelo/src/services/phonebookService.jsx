@@ -2,7 +2,7 @@ import axios from "axios";
 const baseURL = "/api/persons";
 
 // axios GET all persons
-const getAll = (callback) => {
+const getAll = async (callback) => {
   const request = axios.get(baseURL);
   return request
     .then((response) => {

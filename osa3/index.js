@@ -66,10 +66,7 @@ app.delete("/api/persons/:id", (request, response, next) => {
   response.status(204).end;
 });
 
-/* 3.6: puhelinluettelon backend step6
-Tee uuden numeron lisäykseen virheiden käsittely. Pyyntö ei saa onnistua, jos
- -nimi tai numero puuttuu
- - lisättävä nimi on jo luettelossa */
+/* POST  */
 app.post("/api/persons", (request, response) => {
   const body = request.body;
   console.log("body content", body.name + " " + body.number);
