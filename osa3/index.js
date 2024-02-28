@@ -1,9 +1,6 @@
-/*     
-"concurrently \"npm run server\" \"npm run client\""
-"server": "nodemon server.js",
-"client": "cd ../osa1/puhelinluettelo && npm run dev", */
-
 require("dotenv").config();
+app.use(express.static("dist"));
+
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -19,20 +16,12 @@ app.use(
 ); // "combined,common,dev,short,tiny"
 app.use(cors());
 
-app.use(express.static("dist"));
-
 const Person = require("./models/person");
-
-// import data from previous assignment
-// let data = require("./../osa1/puhelinluettelo/db.json");
 
 const PORT = process.env.PORT;
 
-// const generateId = () => {
-//   const maxId =
-//     data.persons.length > 0 ? Math.max(...data.persons.map((n) => n.id)) : 0;
-//   return maxId + 1;
-// };
+app.use(errorHandler);
+app.use(unknownEndpoint);
 
 /* GET all persons */
 app.get("/api/persons", (request, response) => {
@@ -43,43 +32,29 @@ app.get("/api/persons", (request, response) => {
   });
 });
 
-// /* 3.2 backend step 2 */
-// app.get("/info", (request, response) => {
-//   const dataLength = data.persons.length;
-//   const dateTime = new Date();
-//   const text = `Phonebook has info for ${dataLength} \npeople ${dateTime}`;
-//   response.send(text);
-// });
+/* GET person by id */
+app.get("/api/persons/:id", (request, response, next) => {
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 
-// /* GET person by id */
-// app.get("/api/persons/:id", (request, response) => {
-//   Person.findById(request.params.id).then((person) => {
-//     response.json(person);
-//   });
-
-//   // const id = Number(request.params.id);
-//   // // console.log("Requested id:", id);
-//   // // console.log("Dataset:", data); // Log the entire data object to see its structure
-//   // let person = data.persons.find((person) => Number(person.id) === id);
-//   // // console.log("Found person:", person); // Log the person found by the id
-//   // if (person) {
-//   //   response.json(person);
-//   // } else {
-//   //   console.log("Person not found");
-//   //   response.status(404).end();
-//   // }
-//   mongoose.connection.close();
-// });
+  mongoose.connection.close();
+});
 
 /* DELETE person */
-app.delete("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-
-  // console.log("id to be deleted:", id);
-  // console.log("Dataset:", data); // Log the entire data object to see its structure
-  // data.persons = data.persons.filter((person) => Number(person.id) !== id);
-  // // console.log("server delete Dataset:", data); // After delete
-
+app.delete("/api/persons/:id", (request, response, next) => {
+  console.log(Object(request.params.id));
+  Person.findByIdAndDelete(Object(request.params.id))
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
   response.status(204).end;
 });
 
@@ -108,6 +83,19 @@ app.post("/api/persons", (request, response) => {
     mongoose.connection.close();
   });
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
 
 /* Server connection*/
 app.listen(PORT, () => console.log(`Server is running on port:${PORT}`));
