@@ -75,7 +75,10 @@ const App = () => {
 
       phonebookService.createPerson(
         newPerson,
-        (person) => setPersons([...persons, person]),
+        (person) => {
+          setPersons([...persons, person]);
+          setError(false);
+        },
         (error) => {
           // set the error message
           setMessage(error.response.data.error);
