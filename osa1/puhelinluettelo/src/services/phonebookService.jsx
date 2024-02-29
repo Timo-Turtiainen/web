@@ -35,5 +35,4 @@ const deletePerson = (id) => {
       console.log("Error on delete person", error);
     });
 };
-
 export default { getAll, createPerson, deletePerson, updatePerson };
