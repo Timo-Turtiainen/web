@@ -17,7 +17,7 @@ const App = () => {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     phonebookService.getAll((data) => setPersons(data));
@@ -77,7 +77,7 @@ const App = () => {
         newPerson,
         (person) => {
           setPersons([...persons, person]);
-          setError(false);
+          setIsError(false);
         },
         (error) => {
           // set the error message
@@ -87,11 +87,11 @@ const App = () => {
             setMessage(null);
             setStyleType(null);
           }, 2000);
-          setError(true);
+          setIsError(true);
         }
       );
 
-      if (!error) {
+      if (!isError) {
         setMessage(`Added ${newPerson.name} to phone book`);
         setStyleType(addedPersonStyle);
         setTimeout(() => {
