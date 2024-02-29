@@ -17,6 +17,7 @@ const App = () => {
   const [searchText, setSearchText] = useState("");
   const [message, setMessage] = useState(null);
   const [styleType, setStyleType] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     phonebookService.getAll((data) => setPersons(data));
@@ -45,7 +46,7 @@ const App = () => {
           setStyleType(null);
         }, 2000);
         /* if person is already in phone book and phone number is differend => update number */
-      } else {
+      } else if (person.name && person.number !== newNumber) {
         let changedPerson = { ...person, number: newNumber };
         let updatedPerson = await phonebookService.updatePerson(
           person.id,
@@ -57,7 +58,14 @@ const App = () => {
             person.id === updatedPerson.id ? updatedPerson : person
           )
         );
+        setMessage(`Updated ${updatedPerson.name} number on phone book`);
+        setStyleType(addedPersonStyle);
+        setTimeout(() => {
+          setMessage(null);
+          setStyleType(null);
+        }, 2000);
       }
+
       /* else person is not in array of persons  */
     } else {
       let newPerson = {
@@ -65,12 +73,29 @@ const App = () => {
         number: newNumber,
       };
 
-      setMessage(`Added ${newPerson.name} to phone book`);
-      setStyleType(addedPersonStyle);
-      setTimeout(() => {
-        setMessage(null);
-        setStyleType(null);
-      }, 2000);
+      phonebookService.createPerson(
+        newPerson,
+        (person) => setPersons([...persons, person]),
+        (error) => {
+          // set the error message
+          setMessage(error.response.data.error);
+          setStyleType(errorStyle);
+          setTimeout(() => {
+            setMessage(null);
+            setStyleType(null);
+          }, 2000);
+          setError(true);
+        }
+      );
+
+      if (!error) {
+        setMessage(`Added ${newPerson.name} to phone book`);
+        setStyleType(addedPersonStyle);
+        setTimeout(() => {
+          setMessage(null);
+          setStyleType(null);
+        }, 2000);
+      }
     }
   };
 

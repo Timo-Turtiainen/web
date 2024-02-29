@@ -12,9 +12,12 @@ const getAll = async (callback) => {
 };
 
 // Create new Person
-const createPerson = (newPerson, callback) => {
+const createPerson = (newPerson, callback, error) => {
   const request = axios.post(baseURL, newPerson);
-  return request.then((response) => response.data).then(callback);
+  return request
+    .then((response) => response.data)
+    .then(callback)
+    .catch(error);
 };
 
 // Update person based on id
@@ -25,7 +28,12 @@ const updatePerson = async (id, modifyPerson) => {
 
 // Delete person based on id
 const deletePerson = (id) => {
-  axios.delete(`${baseURL}/${id}`);
+  axios
+    .delete(`${baseURL}/${id}`)
+    .then(console.log(`Deleted id:${id}`))
+    .catch((error) => {
+      console.log("Error on delete person", error);
+    });
 };
 
 export default { getAll, createPerson, deletePerson, updatePerson };
