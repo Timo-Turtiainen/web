@@ -71,12 +71,6 @@ const App = () => {
         setMessage(null);
         setStyleType(null);
       }, 2000);
-
-      phonebookService
-        .createPerson(newPerson, (person) => setPersons([...persons, person]))
-        .catch((error) => {
-          console.log("DEBUG: error on createPerson method", error);
-        });
     }
   };
 
