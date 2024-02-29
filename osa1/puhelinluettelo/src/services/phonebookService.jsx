@@ -3,8 +3,8 @@ const baseURL = "/api/persons";
 
 // axios GET all persons
 const getAll = async (callback) => {
-  const request = axios.get(baseURL);
-  return request
+  axios
+    .get(baseURL)
     .then((response) => {
       callback(response.data);
     })
@@ -13,26 +13,29 @@ const getAll = async (callback) => {
 
 // Create new Person
 const createPerson = (newPerson, callback, error) => {
-  const request = axios.post(baseURL, newPerson);
-  return request
-    .then((response) => response.data)
-    .then(callback)
+  axios
+    .post(baseURL, newPerson)
+    .then((response) => {
+      callback(response.data);
+    })
     .catch(error);
 };
 
 // Update person based on id
-const updatePerson = async (id, modifyPerson) => {
-  const request = await axios.put(`${baseURL}/${id}`, modifyPerson);
-  return request.data;
+const updatePerson = (id, modifyPerson, callback, error) => {
+  axios
+    .put(`${baseURL}/${id}`, modifyPerson)
+    .then((response) => {
+      console.log(response.data);
+      callback(response.data);
+    })
+    .catch(error);
 };
 
 // Delete person based on id
 const deletePerson = (id) => {
-  axios
-    .delete(`${baseURL}/${id}`)
-    .then(console.log(`Deleted id:${id}`))
-    .catch((error) => {
-      console.log("Error on delete person", error);
-    });
+  axios.delete(`${baseURL}/${id}`).then((response) => {
+    return response.data;
+  });
 };
 export default { getAll, createPerson, deletePerson, updatePerson };

@@ -9,7 +9,7 @@ console.log("Connnecting to ", url);
 /* make connection */
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log("Connected to MongoDB");
   })
   .catch((error) => {

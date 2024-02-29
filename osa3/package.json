@@ -8,12 +8,16 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin-js": "^1.6.2",
     "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.33.2",
     "nodemon": "^3.1.0"
   },
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../osa1/puhelinluettelo && npm run build && @powershell Copy-Item dist -Recurse ../../osa3"
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../osa1/puhelinluettelo && npm run build && @powershell Copy-Item dist -Recurse ../../osa3",
+    "lint" : "eslint ."
   }
 }

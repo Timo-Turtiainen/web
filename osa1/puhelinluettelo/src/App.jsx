@@ -114,24 +114,20 @@ const App = () => {
   };
 
   const handleDelete = (person) => {
-    try {
-      const personList = persons.filter(
-        (character) => character.id !== person.id
-      );
-      setPersons(personList);
-      phonebookService.deletePerson(person.id);
+    const personList = persons.filter(
+      (character) => character.id !== person.id
+    );
+    setPersons(personList);
+    phonebookService.deletePerson(person.id);
 
-      setMessage(`${person.name} deleted successfully`);
-      setStyleType(deletePersonStyle);
-      setTimeout(() => {
-        setMessage(null);
-        setStyleType(null);
-        setNewName("");
-        setNewNumber("");
-      }, 2000);
-    } catch (error) {
-      console.log("Error on deleting person", error);
-    }
+    setMessage(`${person.name} deleted successfully`);
+    setStyleType(deletePersonStyle);
+    setTimeout(() => {
+      setMessage(null);
+      setStyleType(null);
+      setNewName("");
+      setNewNumber("");
+    }, 2000);
   };
 
   return (

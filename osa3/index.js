@@ -70,9 +70,9 @@ app.get("/api/persons/:id", (request, response, next) => {
 app.delete("/api/persons/:id", (request, response, next) => {
   console.log(request.params.id);
   Person.findByIdAndDelete(request.params.id)
-    .then((result) => {
-      response.status(204).end();
-    })
+    // .then((result) => {
+    //   response.status(204).end();
+    // })
     .catch((error) => next(error));
 });
 

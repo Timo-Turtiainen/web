@@ -27,7 +27,7 @@ const person = new Person({
   number: "050-5556661",
 });
 
-person.save().then((result) => {
+person.save().then(() => {
   console.log("not saved!");
 });
 console.log("after save");
