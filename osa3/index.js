@@ -27,7 +27,6 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
   }
-
   next(error);
 };
 
@@ -38,6 +37,18 @@ app.get("/api/persons", (request, response) => {
     console.log(persons);
     response.json(persons);
   });
+});
+
+app.get("/info", async (request, response) => {
+  try {
+    // Count the number of persons in the collection
+    const count = await Person.countDocuments({});
+    const now = new Date();
+    response.send(`Phonebook has info for ${count} people\n${now}`);
+  } catch (error) {
+    console.error("Error counting persons:", error);
+    response.status(500).send({ error: "Internal Server Error" });
+  }
 });
 
 /* GET person by id */
@@ -51,8 +62,6 @@ app.get("/api/persons/:id", (request, response, next) => {
       }
     })
     .catch((error) => next(error));
-
-  mongoose.connection.close();
 });
 
 /* DELETE person */
