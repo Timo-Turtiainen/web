@@ -14,7 +14,7 @@ beforeEach(async () => {
 
 describe("GET methods", () => {
   /* TEST there is same amount blogs */
-  test("there are two blogs", async () => {
+  test("there are initial amount blogs", async () => {
     const response = await api.get("/api/blogs");
     assert.strictEqual(response.body.length, test_helper.initialBlogs.length);
   });
@@ -32,7 +32,7 @@ describe("GET methods", () => {
 
 describe("POST methods", () => {
   /* TEST add new blog */
-  test("a valid blog can be added ", async () => {
+  test.only("a valid blog can be added ", async () => {
     const newBlog = {
       title: "title for testing",
       author: "test author",

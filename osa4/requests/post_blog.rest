@@ -2,7 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-      "title": "Learn React",
+      "title": "Learn Node",
       "author": "Timo Turtiainen",
       "url": "www.digidigi.com",
       "likes" : "1"

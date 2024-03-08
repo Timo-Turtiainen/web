@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/users
+Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5c2VybmFtZSI6Im1sdXVra2FpIiwiaW 
+
+{
+    "username" : "T1000",
+    "name" : "Pelle Peloton",
+    "password" : "tosisalainen"
+}
