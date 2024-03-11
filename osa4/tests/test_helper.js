@@ -1,5 +1,10 @@
+const mongoose = require("mongoose");
+const supertest = require("supertest");
+const app = require("../app");
+const api = supertest(app);
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const initialBlogs = [
   {
@@ -61,9 +66,38 @@ const usersInDb = async () => {
   return users.map((user) => user.toJSON());
 };
 
+const token = async (username, name, password) => {
+  if (username.length < 1) {
+    const passwordHash = await bcrypt.hash(password, 10);
+    const testUser = new User({ username: username, name: name, passwordHash });
+    await testUser.save();
+    const result = await api
+      .post("/api/login")
+      .send({ username: username, name: name, password: password });
+    const credentials = "Bearer " + result.body.token;
+
+    return credentials;
+  } else {
+    const passwordHash = await bcrypt.hash("sekret", 10);
+    const testUser = new User({
+      username: "testUser",
+      name: "testUser",
+      passwordHash,
+    });
+    await testUser.save();
+    const result = await api
+      .post("/api/login")
+      .send({ username: username, name: name, password: passwordHash });
+    const credentials = "Bearer " + result.body.token;
+
+    return credentials;
+  }
+};
+
 module.exports = {
   initialBlogs,
   nonExistingId,
   blogsInDb,
   usersInDb,
+  token,
 };

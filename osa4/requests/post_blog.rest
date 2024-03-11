@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlQxMDAwIiwiaWQiOiI2NWVhZWRiYzNmYjk0NzQ3MjI3ODE2ZGEiLCJpYXQiOjE3MDk5MDcxNzAsImV4cCI6MTcwOTkxMDc3MH0.0jIEja5T5H9kL4XhvV3NPr84dgzPjSIx45znRxSKzOw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFBQSIsImlkIjoiNjVlZWIzNjA2ODBiODNmOTU0OTkzYjJjIiwiaWF0IjoxNzEwMTQyODk5LCJleHAiOjE3MTAxNDY0OTl9.RMQmwYfOzPCwDayly4hKRKGVJzNnTpztIe8NLXVXiYU
 
 {
       "title": "Full Stack Open",
-      "author": "Matti Luukkainen",
+      "author": "Kalle Luukkainen",
       "url": "www.hyo.com",
       "likes" : 200
 }

@@ -1,4 +1,6 @@
 const logger = require("./logger");
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const requestLogger = (request, response, next) => {
   logger.info("Method:", request.method);
@@ -42,15 +44,12 @@ const tokenExtractor = (request, response, next) => {
   next();
 };
 
-const userExtractor = (request, response, next) => {
-  /* 4.22*: blogilistan laajennus, step10
-Sekä uuden blogin luonnin että blogin poistamisen yhteydessä on selvitettävä 
-operaation tekevän käyttäjän identiteetti. Tätä auttaa jo tehtävässä 4.20 tehty 
-middleware tokenExtractor. Tästä huolimatta post- ja delete-käsittelijöissä tulee vielä 
-selvittää tokenia vastaava käyttäjä.
-
-Tee nyt uusi middleware userExtractor, joka selvittää pyyntöön liittyvän käyttäjän 
-ja sijoittaa sen request-olioon. Eli kun rekisteröit middlewaren ennen routeja tiedostossa app.js  */
+const userExtractor = async (request, response, next) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token invalid" });
+  }
+  request.user = await User.findById(decodedToken.id);
 
   next();
 };

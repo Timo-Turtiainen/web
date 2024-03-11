@@ -1,6 +1,7 @@
 const usersRouter = require("express").Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const middleware = require("../utils/middleware");
 
 usersRouter.get("/", async (request, response) => {
   const users = await User.find({}).populate("blogs", {
@@ -11,7 +12,7 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
-usersRouter.post("/", async (request, response) => {
+usersRouter.post("/", middleware.userExtractor, async (request, response) => {
   const { username, name, password } = request.body;
 
   if (password.length < 3) {

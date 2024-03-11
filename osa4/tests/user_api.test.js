@@ -9,18 +9,13 @@ const bcrypt = require("bcrypt");
 const helper = require("./test_helper");
 
 const User = require("../models/user");
+const Blog = require("../models/user");
 
 beforeEach(async () => {
   await User.deleteMany({});
-
-  const passwordHash = await bcrypt.hash("root", 10);
-  const user = new User({
-    username: "root",
-    name: "root",
-    passwordHash,
-    // blogs: ["5a422a851b54a676234d17f7", "5a422aa71b54a676234d17f8"],
-  });
-
+  await Blog.deleteMany({});
+  const passwordHash = await bcrypt.hash("sekret", 10);
+  const user = new User({ username: "root", passwordHash });
   await user.save();
 });
 
@@ -31,12 +26,15 @@ describe("POST methods", () => {
     const newUser = {
       username: "akan",
       name: "Aku Ankka",
-      password: "salainen",
+      password: "sekret",
     };
+
+    const token = await helper.token();
 
     await api
       .post("/api/users")
       .send(newUser)
+      .set("authorization", token)
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
@@ -47,76 +45,85 @@ describe("POST methods", () => {
     assert(usernames.includes(newUser.username));
   });
 
-  // test("creation fails with proper statuscode and message if username already taken", async () => {
-  //   const usersAtStart = await helper.usersInDb();
+  test("creation fails with proper statuscode and message if username already taken", async () => {
+    const usersAtStart = await helper.usersInDb();
 
-  //   const newUser = {
-  //     username: "root",
-  //     name: "Superuser",
-  //     password: "salainen",
-  //   };
+    const newUser = {
+      username: "root",
+      name: "Superuser",
+      password: "sekret",
+    };
 
-  //   const result = await api
-  //     .post("/api/users")
-  //     .send(newUser)
-  //     .expect(400)
-  //     .expect("Content-Type", /application\/json/);
+    const token = await helper.token();
 
-  //   const usersAtEnd = await helper.usersInDb();
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .set("authorization", token)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
 
-  //   assert(result.body.error.includes("expected `username` to be unique"));
-  //   assert.strictEqual(usersAtEnd.length, usersAtStart.length);
-  // });
+    const usersAtEnd = await helper.usersInDb();
 
-  // test("creation fails with proper statuscode and message if username is too short", async () => {
-  //   const usersAtStart = await helper.usersInDb();
+    assert(result.body.error.includes("expected `username` to be unique"));
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+  });
 
-  //   const newUser = {
-  //     username: "RP",
-  //     name: "Roope Ankka",
-  //     password: "supersalainen",
-  //   };
+  test("creation fails with proper statuscode and message if username is too short", async () => {
+    const usersAtStart = await helper.usersInDb();
 
-  //   const result = await api
-  //     .post("/api/users")
-  //     .send(newUser)
-  //     .expect(400)
-  //     .expect("Content-Type", /application\/json/);
+    const newUser = {
+      username: "RP",
+      name: "Roope Ankka",
+      password: "sekret",
+    };
 
-  //   const usersAtEnd = await helper.usersInDb();
+    const token = await helper.token();
 
-  //   assert(
-  //     result.error.text.includes(
-  //       "username: Path `username` (`RP`) is shorter than the minimum allowed length (3)."
-  //     )
-  //   );
-  //   assert.strictEqual(usersAtEnd.length, usersAtStart.length);
-  // });
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .set("authorization", token)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
 
-  // test("creation fails with proper statuscode and message if password is too short", async () => {
-  //   const usersAtStart = await helper.usersInDb();
+    const usersAtEnd = await helper.usersInDb();
 
-  //   const newUser = {
-  //     username: "HHanhi",
-  //     name: "Hannu Hanhi",
-  //     password: "hh",
-  //   };
+    assert(
+      result.error.text.includes(
+        "username: Path `username` (`RP`) is shorter than the minimum allowed length (3)."
+      )
+    );
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+  });
 
-  //   const result = await api
-  //     .post("/api/users")
-  //     .send(newUser)
-  //     .expect(400)
-  //     .expect("Content-Type", /application\/json/);
+  test("creation fails with proper statuscode and message if password is too short", async () => {
+    const usersAtStart = await helper.usersInDb();
 
-  //   const usersAtEnd = await helper.usersInDb();
+    const newUser = {
+      username: "HHanhi",
+      name: "Hannu Hanhi",
+      password: "sekret",
+    };
 
-  //   assert(
-  //     result.error.text.includes(
-  //       "password has to be at least 3 characters long"
-  //     )
-  //   );
-  //   assert.strictEqual(usersAtEnd.length, usersAtStart.length);
-  // });
+    const token = await helper.token();
+
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .set("authorization", token)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    const usersAtEnd = await helper.usersInDb();
+
+    assert(
+      result.error.text.includes(
+        "password has to be at least 3 characters long"
+      )
+    );
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length);
+  });
 });
 
 describe("GET methods", () => {
@@ -126,6 +133,7 @@ describe("GET methods", () => {
   });
 });
 after(async () => {
-  // await User.deleteMany({});
+  await Blog.deleteMany({});
+  await User.deleteMany({});
   await mongoose.connection.close();
 });

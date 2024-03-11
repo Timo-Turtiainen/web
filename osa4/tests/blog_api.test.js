@@ -6,10 +6,16 @@ const app = require("../app");
 const api = supertest(app);
 const test_helper = require("./test_helper");
 const Blog = require("../models/blog");
+const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.deleteMany({});
   await Blog.insertMany(test_helper.initialBlogs);
+  const passwordHash = await bcrypt.hash("sekret", 10);
+  const user = new User({ username: "root", passwordHash });
+  await user.save();
 });
 
 describe("GET methods", () => {
@@ -32,7 +38,7 @@ describe("GET methods", () => {
 
 describe("POST methods", () => {
   /* TEST add new blog */
-  test.only("a valid blog can be added ", async () => {
+  test("a valid blog can be added ", async () => {
     const newBlog = {
       title: "title for testing",
       author: "test author",
@@ -40,9 +46,12 @@ describe("POST methods", () => {
       likes: 5,
     };
 
+    const token = await test_helper.token();
+
     await api
       .post("/api/blogs")
       .send(newBlog)
+      .set("authorization", token)
       .expect(201)
       .expect("Content-Type", /application\/json/);
 
@@ -55,6 +64,8 @@ describe("POST methods", () => {
 
   /* TEST POST method expect Bad Request because db schema require title and url */
   test("if blog does not contain title or url send 400 Bad Request", async () => {
+    const token = await test_helper.token();
+
     const blogWithoutTitle = {
       author: "Timo",
       url: "www.goodjob.com",
@@ -68,12 +79,15 @@ describe("POST methods", () => {
     await api
       .post("/api/blogs")
       .send(blogWithoutTitle)
+      .set("authorization", token)
       .expect(400)
       .expect("Content-Type", /application\/json/);
 
+    const token2 = await test_helper.token();
     await api
       .post("/api/blogs")
       .send(blogWithoutUrl)
+      .set("authorization", token2)
       .expect(400)
       .expect("Content-Type", /application\/json/);
   });
@@ -82,6 +96,7 @@ describe("POST methods", () => {
 describe("PUT methods", () => {
   /* TEST likes are least 0 */
   test("ensure that likes field is given value if not it is set to 0", async () => {
+    const token = await test_helper.token();
     const blogsAtStart = await test_helper.blogsInDb(); // fetch all blogs
     for (const blog of blogsAtStart) {
       if (!blog.likes) {
@@ -93,6 +108,7 @@ describe("PUT methods", () => {
         await api
           .put(`/api/blogs/${blog.id}`)
           .send(blogToUpdate)
+          .set("authorization", token)
           .expect(200)
           .expect("Content-Type", /application\/json/);
       }
@@ -103,10 +119,12 @@ describe("PUT methods", () => {
     const blogsAtStart = await test_helper.blogsInDb();
     const selectBlog = blogsAtStart[1];
     selectBlog.likes = 15;
+    const token = await test_helper.token();
 
     const response = await api
       .put(`/api/blogs/${selectBlog.id}`)
       .send(selectBlog)
+      .set("authorization", token)
       .expect(200);
     assert.strictEqual(response.body.likes, selectBlog.likes);
   });
@@ -114,10 +132,14 @@ describe("PUT methods", () => {
 
 describe("DELETE methods", () => {
   test("successfully delete one blog", async () => {
+    const token = await test_helper.token();
     const blogsAtStart = await test_helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set("authorization", token)
+      .expect(204);
 
     const blogsAtEnd = await test_helper.blogsInDb();
     assert.strictEqual(blogsAtEnd.length, test_helper.initialBlogs.length - 1);
@@ -129,5 +151,7 @@ describe("DELETE methods", () => {
 
 /* After everything close database connection */
 after(async () => {
+  await Blog.deleteMany({});
+  await User.deleteMany({});
   await mongoose.connection.close();
 });
