@@ -18,7 +18,7 @@ blogRouter.get("/:id", async (request, response) => {
 /* POST new blog */
 blogRouter.post("/", middleware.userExtractor, async (request, response) => {
   const body = request.body;
-
+  console.log("Server side body", body);
   const blog = new Blog({
     title: body.title,
     author: body.author,

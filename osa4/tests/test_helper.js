@@ -66,33 +66,36 @@ const usersInDb = async () => {
   return users.map((user) => user.toJSON());
 };
 
-const token = async (username, name, password) => {
-  if (username.length < 1) {
-    const passwordHash = await bcrypt.hash(password, 10);
-    const testUser = new User({ username: username, name: name, passwordHash });
-    await testUser.save();
-    const result = await api
-      .post("/api/login")
-      .send({ username: username, name: name, password: password });
-    const credentials = "Bearer " + result.body.token;
+/* Write code for testing, need to extract user(username,password) and return valid token */
+// const token = async (user) => {
+//   if (user) {
+//     const passwordHash = await bcrypt.hash(user.password, 10);
+//     const testUser = new User({
+//       username: user.username,
+//       name: user.name,
+//       passwordHash,
+//     });
+//     await testUser.save();
+//     const result = await api.post("/api/login").send(testUser);
+//     const credentials = "Bearer " + result.body.token;
 
-    return credentials;
-  } else {
-    const passwordHash = await bcrypt.hash("sekret", 10);
-    const testUser = new User({
-      username: "testUser",
-      name: "testUser",
-      passwordHash,
-    });
-    await testUser.save();
-    const result = await api
-      .post("/api/login")
-      .send({ username: username, name: name, password: passwordHash });
-    const credentials = "Bearer " + result.body.token;
+//     return credentials;
+//   } else {
+//     const passwordHash = await bcrypt.hash("sekret", 10);
+//     const testUser = new User({
+//       username: "testUser",
+//       name: "testUser",
+//       passwordHash,
+//     });
+//     await testUser.save();
+//     const result = await api
+//       .post("/api/login")
+//       .send({ username: username, name: name, password: passwordHash });
+//     const credentials = "Bearer " + result.body.token;
 
-    return credentials;
-  }
-};
+//     return credentials;
+//   }
+// };
 
 module.exports = {
   initialBlogs,
