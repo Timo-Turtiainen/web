@@ -71,6 +71,9 @@ const App = () => {
   const handleShow = () => {
     setShow(!show);
   };
+  const refreshLikeCount = (blog) => {
+    setBlogs([...blogs, blog]);
+  };
 
   return (
     <div>
@@ -105,7 +108,14 @@ const App = () => {
           </div>
         )}
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} show={show} handleShow={handleShow} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            show={show}
+            user={user}
+            handleShow={handleShow}
+            refreshLikeCount={refreshLikeCount}
+          />
         ))}
       </Togglable>
     </div>

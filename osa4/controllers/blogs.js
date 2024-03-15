@@ -18,7 +18,7 @@ blogRouter.get("/:id", async (request, response) => {
 /* POST new blog */
 blogRouter.post("/", middleware.userExtractor, async (request, response) => {
   const body = request.body;
-  console.log("Server side body", body);
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -51,9 +51,14 @@ blogRouter.delete(
 
 blogRouter.put("/:id", middleware.userExtractor, async (request, response) => {
   const blog = request.body;
+  console.log("SERVER ", blog);
+  console.log("SERVER ", request.params.id);
+
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
   });
+
+  console.log("updated blog", updatedBlog);
   response.json(updatedBlog);
 });
 
