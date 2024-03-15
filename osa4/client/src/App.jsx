@@ -6,6 +6,7 @@ import LoginForm from "./components/loginForm";
 import BlogForm from "./components/BlogForm";
 import loginService from "./services/loginService";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -15,6 +16,8 @@ const App = () => {
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
   const [isNewBlog, setIsNewBlog] = useState(false);
+  const [show, setShow] = useState(false);
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -65,6 +68,10 @@ const App = () => {
     }, 2000);
   };
 
+  const handleShow = () => {
+    setShow(!show);
+  };
+
   return (
     <div>
       <h1>Blog App</h1>
@@ -85,23 +92,22 @@ const App = () => {
         />
       )}
       {user && (
-        <div>
-          <p>
-            {user.name} logged in <button onClick={handleLogout}>Logout</button>
-          </p>
-          {<BlogForm user={user} addBlogs={addBlogs} />}
-        </div>
+        <p>
+          {user.name} logged in <button onClick={handleLogout}>Logout</button>
+        </p>
       )}
-
-      <h2>Blogs</h2>
-      {isNewBlog && (
-        <div className="addedBlog">
-          <Notification message={message} />
-        </div>
-      )}
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
+        <BlogForm user={user} addBlogs={addBlogs} />
+        <h2>Blogs</h2>
+        {isNewBlog && (
+          <div className="addedBlog">
+            <Notification message={message} />
+          </div>
+        )}
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} show={show} handleShow={handleShow} />
+        ))}
+      </Togglable>
     </div>
   );
 };
