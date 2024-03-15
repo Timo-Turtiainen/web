@@ -23,7 +23,7 @@ function BlogForm({ user, addBlogs }) {
 
   return (
     <>
-      <h1>Create new blog</h1>
+      <h2>Create new blog</h2>
       <form onSubmit={handleAddBlog}>
         Title
         <input

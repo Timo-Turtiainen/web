@@ -1,0 +1,35 @@
+.error {
+  color: rgb(167, 0, 153);
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.addedBlog {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: aqua;
+}
+
+.form {
+  align-items: center;
+  margin-top: 25px;
+}
+
+.button {
+  margin-left: 20px;
+}

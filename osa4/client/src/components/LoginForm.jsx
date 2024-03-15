@@ -9,7 +9,7 @@ function LoginForm({
 }) {
   return (
     <>
-      <h1>Login</h1>
+      <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div>
           Username

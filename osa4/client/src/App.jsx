@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
+import "./App.css";
 import Blog from "./components/Blog";
 import blogService from "./services/blogService";
 import LoginForm from "./components/loginForm";
 import BlogForm from "./components/BlogForm";
 import loginService from "./services/loginService";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,6 +14,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
+  const [isNewBlog, setIsNewBlog] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -40,7 +43,8 @@ const App = () => {
       setIsError(true);
       setTimeout(() => {
         setMessage(null);
-      }, 5000);
+        setIsError(false);
+      }, 2000);
     }
   };
 
@@ -53,10 +57,22 @@ const App = () => {
 
   const addBlogs = (blog) => {
     setBlogs([...blogs, blog]);
+    setMessage(`A new blog ${blog.title} ${blog.author} added`);
+    setIsNewBlog(true);
+    setTimeout(() => {
+      setMessage("");
+      setIsNewBlog(false);
+    }, 2000);
   };
 
   return (
     <div>
+      <h1>Blog App</h1>
+      {isError && (
+        <div className="error">
+          <Notification message={message} />
+        </div>
+      )}
       {!user && (
         <LoginForm
           username={username}
@@ -77,8 +93,12 @@ const App = () => {
         </div>
       )}
 
-      <h2>blogs</h2>
-      {isError && <Notification message={message} />}
+      <h2>Blogs</h2>
+      {isNewBlog && (
+        <div className="addedBlog">
+          <Notification message={message} />
+        </div>
+      )}
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
