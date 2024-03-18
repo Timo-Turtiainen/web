@@ -35,11 +35,11 @@ function Blog({ blog, refreshBlogs, refreshAfterDelete, user }) {
 
   return (
     <div style={blogStyle}>
-      {blog.title}{" "}
+      {blog.title} {blog.author}
       <button onClick={toggleVisibility}>{visible ? "hide" : "view"}</button>
       {visible ? (
         <div>
-          {blog.author}
+          {blog.url}
           <br></br>
           Likes {blog.likes} <button onClick={handleLikes}>like</button>
           <br></br>
