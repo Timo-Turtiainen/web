@@ -40,7 +40,7 @@ blogRouter.delete(
   middleware.userExtractor,
   async (request, response) => {
     const blog = await Blog.findById(request.params.id);
-
+    console.log("server delete ", blog);
     if (blog.user._id.toString() === request.user._id.toString()) {
       await Blog.findByIdAndDelete(request.params.id);
 
@@ -49,16 +49,11 @@ blogRouter.delete(
   }
 );
 
-blogRouter.put("/:id", middleware.userExtractor, async (request, response) => {
+blogRouter.put("/:id", async (request, response) => {
   const blog = request.body;
-  console.log("SERVER ", blog);
-  console.log("SERVER ", request.params.id);
-
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
   });
-
-  console.log("updated blog", updatedBlog);
   response.json(updatedBlog);
 });
 

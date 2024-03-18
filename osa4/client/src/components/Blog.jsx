@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from "../services/blogService";
 
-function Blog({ blog, refreshLikeCount, user }) {
+function Blog({ blog, refreshBlogs, refreshAfterDelete, user }) {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
@@ -22,7 +22,15 @@ function Blog({ blog, refreshLikeCount, user }) {
       updateLikeCount,
       user.token
     );
-    // refreshLikeCount(updateBlog);
+
+    refreshBlogs(updateBlog);
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Do you really want to delete?")) {
+      refreshAfterDelete(blog);
+      await blogService.deleteBlog(blog, user.token);
+    }
   };
 
   return (
@@ -31,14 +39,16 @@ function Blog({ blog, refreshLikeCount, user }) {
       <button onClick={toggleVisibility}>{visible ? "hide" : "view"}</button>
       {visible ? (
         <div>
-          {blog.author} <br></br>
+          {blog.author}
+          <br></br>
           Likes {blog.likes} <button onClick={handleLikes}>like</button>
           <br></br>
-          {user.name}
+          {blog.user.name}
         </div>
       ) : (
         <div></div>
       )}
+      <button onClick={handleDelete}>Delete</button>
     </div>
   );
 }

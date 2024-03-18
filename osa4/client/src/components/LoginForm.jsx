@@ -1,4 +1,13 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+LoginForm.propTypes = {
+  username: PropTypes.string,
+  setUsername: PropTypes.func,
+  password: PropTypes.string,
+  setPassword: PropTypes.func,
+  handleLogin: PropTypes.func,
+};
 
 function LoginForm({
   username,

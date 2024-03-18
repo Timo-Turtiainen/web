@@ -16,17 +16,25 @@ const createBlog = async (newBlog, token) => {
 };
 
 const updateBlog = async (updatedBlog, token) => {
-  console.log("UPDATED ", updatedBlog.id);
   const config = {
     headers: { Authorization: `Bearer ${token}` },
   };
   const request = axios.put(
     `${baseUrl}/${updatedBlog.id}`,
-    updatedBlog,
+    { ...updatedBlog, user: updatedBlog.user.id },
     config
   );
+
   const response = await request;
   return response.data;
 };
 
-export default { getAll, createBlog, updateBlog };
+const deleteBlog = async (blog, token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+  const response = await axios.delete(`${baseUrl}/${blog.id}`, config);
+  return response.data;
+};
+
+export default { getAll, createBlog, updateBlog, deleteBlog };

@@ -13,6 +13,7 @@ function BlogForm({ user, addBlogs }) {
       title: title,
       author: author,
       url: url,
+      likes: 0,
     };
     const addNewBlog = await blogService.createBlog(newBlog, user.token);
     addBlogs(addNewBlog);

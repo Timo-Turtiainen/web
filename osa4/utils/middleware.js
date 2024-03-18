@@ -32,6 +32,8 @@ const errorHandler = (error, request, response, next) => {
     return response.status(401).json({
       error: "token expired",
     });
+  } else {
+    console.log(error);
   }
   next(error);
 };

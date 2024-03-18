@@ -32,6 +32,8 @@ const App = () => {
     }
   }, []);
 
+  const sortedBlogs = blogs.toSorted((a, b) => b.likes - a.likes);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -71,10 +73,14 @@ const App = () => {
   const handleShow = () => {
     setShow(!show);
   };
-  const refreshLikeCount = (blog) => {
-    setBlogs([...blogs, blog]);
+
+  const refreshBlogs = (blog) => {
+    setBlogs(blogs.map((item) => (item.id === blog.id ? blog : item)));
   };
 
+  const refreshAfterDelete = (blog) => {
+    setBlogs(blogs.filter((item) => item.id !== blog.id));
+  };
   return (
     <div>
       <h1>Blog App</h1>
@@ -107,14 +113,15 @@ const App = () => {
             <Notification message={message} />
           </div>
         )}
-        {blogs.map((blog) => (
+        {sortedBlogs.map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}
             show={show}
             user={user}
             handleShow={handleShow}
-            refreshLikeCount={refreshLikeCount}
+            refreshBlogs={refreshBlogs}
+            refreshAfterDelete={refreshAfterDelete}
           />
         ))}
       </Togglable>
