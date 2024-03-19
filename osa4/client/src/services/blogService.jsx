@@ -24,7 +24,6 @@ const updateBlog = async (updatedBlog, token) => {
     { ...updatedBlog, user: updatedBlog.user.id },
     config
   );
-
   const response = await request;
   return response.data;
 };
