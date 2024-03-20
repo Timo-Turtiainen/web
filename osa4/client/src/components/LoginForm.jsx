@@ -25,7 +25,7 @@ function LoginForm({
           <input
             type="text"
             value={username}
-            name="Username"
+            id="username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
@@ -34,11 +34,11 @@ function LoginForm({
           <input
             type="password"
             value={password}
-            name="Password"
+            id="password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" id="loginButton">Login</button>
       </form>
     </>
   );

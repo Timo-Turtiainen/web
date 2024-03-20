@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
-import { vi } from 'vitest';
 
 test("renders content", () => {
   const blog = {
@@ -48,7 +47,8 @@ test("after pressing view button show also url and likes  ", () => {
 
 // 5.15 and 5.16 NOT READY!!!!
 
-test("count the presses of likes button", async () => {
+test("count the presses of like button", async () => {
+  
   const blog = {
     title: "title title",
     author: "test author",
@@ -58,52 +58,18 @@ test("count the presses of likes button", async () => {
       username: "AAA",
       name: "Aku Ankka",
     },
-  }
+  };
 
-  const handleLikes = vi.fn();
+  const mockHandler = vi.fn()
+  const user = userEvent.setup()
+ render(<Blog blog={blog} user={blog.user} handleLikes={mockHandler} />)
+  // open view
 
-  render(<Blog blog={blog} user={blog.user} handleLikes={handleLikes} />)
+  const viewButton = screen.getByText("view");
+  await user.click(viewButton);
 
-  // Click the "view" button
-  const viewButton = screen.getByText("view")
-  await userEvent.click(viewButton)
-
-  // Click the "like" button
-  const likeButton = screen.getByText("like")
-  await userEvent.click(likeButton)
-
-
-  expect(handleLikes.mock.calls).toHaveLength(0)
-
+  const button = screen.getByText('like')
+  await user.click(button)
+  await user.click(button)
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
-// test("test blogForm", async () => {
-
-//   const blog = {
-//     title: "title title",
-//     author: "test author",
-//     url: "test url",
-//     likes: 0,
-//     user: {
-//       username: "AAA",
-//       name: "Aku Ankka",
-//     },
-//   };
-
-//   const user = userEvent.setup()
-//   const addBlogs = vi.fn()
-
-//   render(<BlogForm blog={blog} user={blog.user} addBlogs={addBlogs} />)
-
-//   const input = screen.getAllByRole("textbox")
-
-//   const sendButton = screen.getByText("Save")
-
-//   await user.type(input[0], "testing a form...1")
-//   await user.type(input[1], "testing a form...2")
-//   await user.type(input[2], "testing a form...3")
-//   await user.click(sendButton)
-
-//   expect(addBlogs.mock.calls).toHavelength(1)
-//   expect(addBlogs.mock.calls[0][0]).toBe("testing a form...1")
-
-// })
