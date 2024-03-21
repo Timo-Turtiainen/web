@@ -16,9 +16,6 @@ describe('Blog ', function() {
     //   cy.contains('Blog App')
     // })
 
-  
-
- 
     it('a new blog can be created' , function() {
       cy.contains('Create new blog').click()
       cy.get('#title').type('title blog created by cypress')
