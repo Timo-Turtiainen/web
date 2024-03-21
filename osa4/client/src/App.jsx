@@ -78,6 +78,7 @@ const App = () => {
   }
 
   const handleAddBlog = async (e, blog) => {
+    
     e.preventDefault()
 
     const newBlog = {
@@ -93,6 +94,9 @@ const App = () => {
     setIsNewBlog(true)
     setTimeout(() => {
       setMessage("")
+      blog.setTitle("")
+      blog.setAuthor("")
+      blog.setUrl("")
       setIsNewBlog(false)
     }, 2000)
     

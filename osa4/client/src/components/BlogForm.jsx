@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import blogService from "../services/blogService";
 
 function BlogForm({ handleAddBlog }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
+  
   return (
     <>
       <h2>Create new blog</h2>
-      <form onSubmit={ () => handleAddBlog({title, author, url})}>
+      <form onSubmit={ (e) => handleAddBlog(e,{ title, author, url, setTitle, setAuthor, setUrl})}>
         <label htmlFor="title">Title</label>
         <input
           value={title}
@@ -26,7 +26,10 @@ function BlogForm({ handleAddBlog }) {
         />
         <br></br>
         <label htmlFor="url">Url</label>
-        <input value={url} onChange={({ target }) => setUrl(target.value)} className="url" id="url" />
+        <input value={url} 
+          onChange={({ target }) => setUrl(target.value)} 
+          className="url" 
+          id="url"/>
         <br></br>
         <button type="submit">Save</button>
         

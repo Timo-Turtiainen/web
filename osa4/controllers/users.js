@@ -12,7 +12,7 @@ usersRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
-usersRouter.post("/", middleware.userExtractor, async (request, response) => {
+usersRouter.post("/", async (request, response) => {
   const { username, name, password } = request.body;
 
   if (password.length < 3) {
