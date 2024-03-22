@@ -78,7 +78,6 @@ const App = () => {
   }
 
   const handleAddBlog = async (e, blog) => {
-    
     e.preventDefault()
 
     const newBlog = {
@@ -125,7 +124,7 @@ const App = () => {
           {user.name} logged in <button onClick={handleLogout}>Logout</button>
         </p>
       )}
-      <Togglable buttonLabel="Create new blog" ref={blogFormRef} id="newBlogButton">
+      <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
         <BlogForm handleAddBlog={handleAddBlog} />
         <h2>Blogs</h2>
         {isNewBlog && (

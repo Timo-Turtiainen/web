@@ -5,7 +5,6 @@ function BlogForm({ handleAddBlog }) {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  
   return (
     <>
       <h2>Create new blog</h2>
@@ -31,7 +30,7 @@ function BlogForm({ handleAddBlog }) {
           className="url" 
           id="url"/>
         <br></br>
-        <button type="submit">Save</button>
+        <button type="submit" id='saveBlog'>Save</button>
         
       </form>
     </>

@@ -23,7 +23,7 @@ blogRouter.post("/", middleware.userExtractor, async (request, response) => {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes,
+    likes: body.likes < 1 ? 0 : body.likes,
     user: request.user._id,
   });
 
