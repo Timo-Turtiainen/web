@@ -19,7 +19,7 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const anecdotReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'VOTE':
       const id = action.payload.id
@@ -49,7 +49,24 @@ export const createAnecdote = (anecdote) => {
       votes: 0
      }
   }
-
 }
 
-export default reducer
+export const filterReducer = (state = 'ALL', action) => {
+  switch(action.type) {
+    case 'SET_FITLER': 
+      const query = action.payload
+      console.log(query)
+      return action.payload
+    default:
+      return state
+  }
+}
+
+export const filterChange = filter => {
+  return {
+    type: 'SET_FILTER',
+    payload: filter
+  }
+}
+
+export default anecdotReducer
