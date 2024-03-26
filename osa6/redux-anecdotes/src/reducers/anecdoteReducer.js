@@ -29,7 +29,6 @@ const anecdotReducer = (state = initialState, action) => {
     case 'NEW_ANECDOTE': 
       return state.concat(action.payload)
   }
-
   return state
 }
 
@@ -51,12 +50,11 @@ export const createAnecdote = (anecdote) => {
   }
 }
 
-export const filterReducer = (state = 'ALL', action) => {
+export const filterReducer = (state = "", action) => {
   switch(action.type) {
-    case 'SET_FITLER': 
-      const query = action.payload
-      console.log(query)
+    case 'SET_FILTER':
       return action.payload
+      
     default:
       return state
   }

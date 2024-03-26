@@ -1,12 +1,12 @@
-import { filterChange } from "../reducers/anecdoteReducer"
 import { useDispatch } from "react-redux"
+import { filterAnecdote } from "../reducers/filterSlice"
 
 const Filter = () => {
   const dispatch = useDispatch()
-    const handleChange = (event) => {
+  
+    const handleChange = (e) => {
       // input-kentän arvo muuttujassa event.target.value
-      
-      dispatch(filterChange(event.target.value))
+      dispatch(filterAnecdote(e.target.value))
     }
     const style = {
       marginBottom: 10
