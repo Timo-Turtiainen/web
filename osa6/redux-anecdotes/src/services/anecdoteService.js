@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { nanoid } from '@reduxjs/toolkit'
 
-const baseUrl = 'http://localhost:3003/anecdotes'
+const baseUrl = 'http://localhost:3001/anecdotes'
 
 const getAll = async () => {
   const response = await axios.get(baseUrl)
