@@ -1,21 +1,20 @@
-import { useContext } from "react"
-import AnecdoteContext from "./AnecdoteContext"
+import { useNotificationContext } from './NotificationContext'
 
 const Notification = () => {
 
-  const [notification, notificationDispatch] = useContext(AnecdoteContext)
+  const [notification, dispatch] = useNotificationContext()
 
+  if(!notification) {
+    return null
+  }
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1,
     marginBottom: 5
   }
-
   
-  
-  if (!notification) return null
-
+  setTimeout(() => dispatch({type: 'VOTE', payload: ''}), 2000)
   return (
     <div style={style}>
       { notification }
