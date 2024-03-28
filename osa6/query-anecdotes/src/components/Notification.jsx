@@ -15,6 +15,7 @@ const Notification = () => {
   }
   
   setTimeout(() => dispatch({type: 'VOTE', payload: ''}), 2000)
+  
   return (
     <div style={style}>
       { notification }

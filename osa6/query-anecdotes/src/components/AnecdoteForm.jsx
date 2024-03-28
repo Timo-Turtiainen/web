@@ -12,6 +12,9 @@ const AnecdoteForm = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
     },
+    onError: () => {
+      dispatch({ type: 'ERROR', payload: `too short, must have length 5 or more`})
+    }
   })
 
   const onCreate = (event) => {
