@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { useField } from './hooks/index'
 
-
 const Menu = () => {
   const padding = {
     paddingRight: 5
@@ -56,7 +55,7 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
-
+  
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -70,6 +69,10 @@ const CreateNew = (props) => {
     navigate('/')
   }
   
+  const handleReset = (content) => {
+    reset({...content})
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -87,6 +90,7 @@ const CreateNew = (props) => {
           <input { ...info } />
         </div>
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
